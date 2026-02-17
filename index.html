@@ -439,7 +439,7 @@ display:none;align-items:center;justify-content:center;flex-direction:column;gap
 <h2>¡Contrato generado!</h2>
 <p>Tu contrato de compraventa se descargó como PDF. Comparte una copia con el comprador por WhatsApp o email.</p>
 <button class="btn btn-primary" onclick="downloadPDF()" style="margin-bottom:14px">📄 Descargar PDF otra vez</button>
-<button class="btn btn-ghost" onclick="shareWhatsApp()" style="flex:1;width:100%">📱 Compartir por WhatsApp</button>
+<button class="btn btn-ghost" onclick="shareWhatsApp()" style="flex:1;width:100%">📤 Compartir contrato</button>
 <br><br>
 <button class="btn btn-ghost" onclick="resetAll()" style="flex:1;width:100%;margin-top:8px">Crear otro contrato</button>
 </div>
@@ -978,10 +978,26 @@ function downloadPDF() {
 
 function shareWhatsApp() {
   const v = (id) => document.getElementById(id)?.value || '';
-  const text = encodeURIComponent(
-    `Hola, te comparto el contrato de compraventa del ${v('a_marca')} ${v('a_modelo')} ${v('a_año')}. Fue generado con VentaDoc. Revisa el PDF adjunto.`
-  );
-  window.open(`https://wa.me/?text=${text}`, '_blank');
+  const fileName = `VentaDoc_${v('a_marca')}_${v('a_modelo')}_${v('a_año')}_${new Date().toISOString().slice(0,10)}.pdf`;
+  
+  // Try Web Share API (works on modern mobile browsers - can share actual files)
+  if (navigator.share && navigator.canShare && pdfBlob) {
+    const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+    
+    if (navigator.canShare({ files: [file] })) {
+      navigator.share({
+        title: 'Contrato de compraventa',
+        text: `Contrato de compraventa del ${v('a_marca')} ${v('a_modelo')} ${v('a_año')} generado con VentaDoc.`,
+        files: [file]
+      }).catch(err => {
+        console.log('Share cancelled or failed:', err);
+      });
+      return;
+    }
+  }
+  
+  // Fallback: save PDF first, then open WhatsApp with message
+  alert('Para compartir por WhatsApp:\n\n1. Primero descarga el PDF tocando "Descargar PDF"\n2. Abre WhatsApp\n3. Adjunta el PDF desde tus archivos descargados');
 }
 
 function resetAll() {
