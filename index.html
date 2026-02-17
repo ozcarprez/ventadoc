@@ -788,7 +788,7 @@ async function generatePDF() {
       `PRIMERA.- OBJETO. El VENDEDOR transfiere la propiedad del siguiente vehículo al COMPRADOR: ${vehicleDesc}`,
       `SEGUNDA.- PRECIO. El precio pactado por ambas partes para la compraventa del vehículo descrito es de ${fmt(v('a_precio'))} (${numberToWords(parseInt(v('a_precio')))} pesos mexicanos), que el COMPRADOR paga al VENDEDOR en este acto.`,
       `TERCERA.- CONDICIONES. El COMPRADOR declara que ha revisado el vehículo y lo acepta en el estado físico y mecánico en que se encuentra al momento de esta operación. ${v('a_observaciones') ? 'Observaciones: ' + v('a_observaciones') : ''}`,
-      `CUARTA.- RESPONSABILIDAD. A partir de la firma del presente contrato, el COMPRADOR asume toda responsabilidad civil, penal y administrativa sobre el vehículo. El VENDEDOR queda libre de cualquier responsabilidad sobre el uso del vehículo posterior a esta fecha.`,
+      `CUARTA.- RESPONSABILIDAD. A partir de la generación del presente contrato, el COMPRADOR asume toda responsabilidad civil, penal y administrativa sobre el vehículo. El VENDEDOR queda libre de cualquier responsabilidad sobre el uso del vehículo posterior a esta fecha.`,
       `QUINTA.- DOCUMENTACIÓN. El VENDEDOR entrega al COMPRADOR la documentación del vehículo y se compromete a realizar los trámites de baja correspondientes ante las autoridades de tránsito.`,
       `SEXTA.- EVIDENCIA. Las partes aceptan que las fotografías anexas a este documento (identificaciones, VIN, estado del vehículo) forman parte integral de este contrato como evidencia del estado del vehículo y la identidad de las partes al momento de la transacción.`,
       `SÉPTIMA.- JURISDICCIÓN. Para todo lo relacionado con la interpretación y cumplimiento de este contrato, las partes se someten a la jurisdicción de los tribunales competentes de ${ciudad}.`,
@@ -800,29 +800,45 @@ async function generatePDF() {
       y += 4;
     });
     
-    // SIGNATURES
+    // DIGITAL ACCEPTANCE (replaces physical signatures)
     y = checkPage(y, 50);
-    y += 8;
+    y += 6;
     y = addLine(y);
     y += 4;
-    y = addText('FIRMAS', margin, y, { size: 12, style: 'bold' });
-    y += 12;
+    y = addText('CONSTANCIA DE ACEPTACIÓN DIGITAL', margin, y, { size: 11, style: 'bold' });
+    y += 3;
     
-    // Signature lines
-    const sigW = contentW / 2 - 10;
-    doc.setDrawColor(30, 30, 30);
-    doc.line(margin, y, margin + sigW, y);
-    doc.line(margin + sigW + 20, y, margin + sigW + 20 + sigW, y);
-    y += 5;
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text('VENDEDOR', margin, y);
-    doc.text('COMPRADOR', margin + sigW + 20, y);
+    y = addText(`Ambas partes declaran que la generación de este documento digital constituye su aceptación voluntaria de los términos aquí establecidos. Este contrato fue creado con el consentimiento de ambas partes presentes al momento de la transacción.`, margin, y, { size: 9.5 });
     y += 4;
-    doc.setFont('helvetica', 'normal');
+    
+    // Seller info box
+    doc.setFillColor(245, 245, 245);
+    doc.rect(margin, y, contentW / 2 - 5, 22, 'F');
+    doc.rect(margin + contentW / 2 + 5, y, contentW / 2 - 5, 22, 'F');
+    
     doc.setFontSize(8);
-    doc.text(v('v_nombre'), margin, y);
-    doc.text(v('c_nombre'), margin + sigW + 20, y);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(100, 100, 100);
+    doc.text('VENDEDOR', margin + 4, y + 5);
+    doc.text('COMPRADOR', margin + contentW / 2 + 9, y + 5);
+    
+    doc.setFontSize(9);
+    doc.setTextColor(30, 30, 30);
+    doc.text(v('v_nombre'), margin + 4, y + 11);
+    doc.text(v('c_nombre'), margin + contentW / 2 + 9, y + 11);
+    
+    doc.setFontSize(7.5);
+    doc.setTextColor(120, 120, 120);
+    doc.text('INE: ' + v('v_ine').toUpperCase(), margin + 4, y + 16);
+    doc.text('INE: ' + v('c_ine').toUpperCase(), margin + contentW / 2 + 9, y + 16);
+    doc.text('Tel: ' + v('v_telefono'), margin + 4, y + 20);
+    doc.text('Tel: ' + v('c_telefono'), margin + contentW / 2 + 9, y + 20);
+    
+    y += 28;
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Documento generado el ${dateStr} • ID: VD-${Date.now().toString(36).toUpperCase()}`, margin, y);
     
     // ===== PHOTO PAGES =====
     const photoEntries = Object.entries(photos);
