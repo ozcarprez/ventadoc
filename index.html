@@ -437,9 +437,9 @@ display:none;align-items:center;justify-content:center;flex-direction:column;gap
 <div class="success-screen fade-up">
 <div class="success-icon">✅</div>
 <h2>¡Contrato generado!</h2>
-<p>Tu contrato de compraventa se descargó como PDF. Comparte una copia con el comprador por WhatsApp o email.</p>
-<button class="btn btn-primary" onclick="downloadPDF()" style="margin-bottom:14px">📄 Descargar PDF otra vez</button>
-<button class="btn btn-ghost" onclick="shareWhatsApp()" style="flex:1;width:100%">📤 Compartir contrato</button>
+<p>Comparte el PDF con el comprador para que ambos tengan copia del contrato.</p>
+<button class="btn btn-primary" onclick="sharePDF()" style="margin-bottom:14px">📤 Compartir contrato</button>
+<button class="btn btn-ghost" onclick="savePDF()" style="flex:1;width:100%">📄 Guardar PDF en mi celular</button>
 <br><br>
 <button class="btn btn-ghost" onclick="resetAll()" style="flex:1;width:100%;margin-top:8px">Crear otro contrato</button>
 </div>
@@ -908,47 +908,15 @@ async function generatePDF() {
       doc.text(`Este documento fue generado digitalmente y contiene evidencia fotográfica con marca de tiempo.`, margin, 274);
     }
     
-    // Save
-    const fileName = `VentaDoc_${v('a_marca')}_${v('a_modelo')}_${v('a_año')}_${now.toISOString().slice(0,10)}.pdf`;
-    
-    // Store for re-download
+    // Store PDF for sharing/downloading
     pdfBlob = doc.output('blob');
     pdfDataUri = doc.output('datauristring');
     
-    // On mobile, open PDF in new tab (most reliable method)
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-      // Mobile: open as data URI in same window or new tab
-      const pdfWindow = window.open('', '_blank');
-      if (pdfWindow) {
-        pdfWindow.document.write(
-          '<html><head><title>VentaDoc - Contrato</title><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
-          '<body style="margin:0;padding:0;background:#000">' +
-          '<embed src="' + pdfDataUri + '" type="application/pdf" width="100%" height="100%" style="position:fixed;top:0;left:0;width:100%;height:100%">' +
-          '<p style="text-align:center;padding:20px;color:white;font-family:sans-serif">' +
-          'Si no ves el PDF, <a href="' + pdfDataUri + '" download="' + fileName + '" style="color:#C8FF3E">toca aquí para descargarlo</a></p>' +
-          '</body></html>'
-        );
-        pdfWindow.document.close();
-      } else {
-        // Popup blocked: fallback to direct download link
-        try { doc.save(fileName); } catch(e) {
-          const a = document.createElement('a');
-          a.href = pdfDataUri;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-      }
-    } else {
-      // Desktop: direct save
-      doc.save(fileName);
-    }
-    
     loading.classList.remove('show');
     showScreen(6);
+    
+    // Auto-trigger share on mobile for best experience
+    setTimeout(() => { sharePDF(); }, 600);
     
   } catch (err) {
     loading.classList.remove('show');
@@ -957,63 +925,83 @@ async function generatePDF() {
   }
 }
 
-function downloadPDF() {
-  if (pdfDataUri) {
-    const v = (id) => document.getElementById(id)?.value || '';
-    const fileName = `VentaDoc_${v('a_marca')}_${v('a_modelo')}_${v('a_año')}_${new Date().toISOString().slice(0,10)}.pdf`;
-    
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-      const pdfWindow = window.open('', '_blank');
-      if (pdfWindow) {
-        pdfWindow.document.write(
-          '<html><head><title>VentaDoc - Contrato</title><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
-          '<body style="margin:0;padding:0;background:#000">' +
-          '<embed src="' + pdfDataUri + '" type="application/pdf" width="100%" height="100%" style="position:fixed;top:0;left:0;width:100%;height:100%">' +
-          '<p style="text-align:center;padding:20px;color:white;font-family:sans-serif">' +
-          'Si no ves el PDF, <a href="' + pdfDataUri + '" download="' + fileName + '" style="color:#C8FF3E">toca aquí para descargarlo</a></p>' +
-          '</body></html>'
-        );
-        pdfWindow.document.close();
-      } else {
-        const a = document.createElement('a');
-        a.href = pdfDataUri;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-    } else {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(pdfBlob);
-      a.download = fileName;
-      a.click();
-    }
-  }
+function getFileName() {
+  const v = (id) => document.getElementById(id)?.value || '';
+  return `VentaDoc_${v('a_marca')}_${v('a_modelo')}_${v('a_año')}_${new Date().toISOString().slice(0,10)}.pdf`;
 }
 
-function shareWhatsApp() {
-  const v = (id) => document.getElementById(id)?.value || '';
-  const fileName = `VentaDoc_${v('a_marca')}_${v('a_modelo')}_${v('a_año')}_${new Date().toISOString().slice(0,10)}.pdf`;
+function getPDFFile() {
+  if (!pdfBlob) return null;
+  return new File([pdfBlob], getFileName(), { type: 'application/pdf' });
+}
+
+async function sharePDF() {
+  const file = getPDFFile();
+  if (!file) { alert('Error: no se encontró el PDF. Genera el contrato de nuevo.'); return; }
   
-  // Try Web Share API (works on modern mobile browsers - can share actual files)
-  if (navigator.share && navigator.canShare && pdfBlob) {
-    const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-    
-    if (navigator.canShare({ files: [file] })) {
-      navigator.share({
-        title: 'Contrato de compraventa',
-        text: `Contrato de compraventa del ${v('a_marca')} ${v('a_modelo')} ${v('a_año')} generado con VentaDoc.`,
-        files: [file]
-      }).catch(err => {
-        console.log('Share cancelled or failed:', err);
-      });
-      return;
+  // Try Web Share API with file
+  if (navigator.share && navigator.canShare) {
+    try {
+      const shareData = { files: [file] };
+      if (navigator.canShare(shareData)) {
+        await navigator.share({
+          title: 'Contrato de compraventa - VentaDoc',
+          text: 'Contrato de compraventa de vehículo usado',
+          files: [file]
+        });
+        return;
+      }
+    } catch(err) {
+      if (err.name === 'AbortError') return; // User cancelled, that's fine
+      console.warn('Web Share with file failed:', err);
     }
   }
   
-  // Fallback: save PDF first, then open WhatsApp with message
-  alert('Para compartir por WhatsApp:\n\n1. Primero descarga el PDF tocando "Descargar PDF"\n2. Abre WhatsApp\n3. Adjunta el PDF desde tus archivos descargados');
+  // Fallback: try sharing without file (just text)
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Contrato de compraventa - VentaDoc',
+        text: 'Te comparto el contrato de compraventa generado con VentaDoc. Descárgalo en: ventadoc.vercel.app',
+      });
+      return;
+    } catch(err) {
+      if (err.name === 'AbortError') return;
+    }
+  }
+  
+  // Final fallback
+  savePDF();
+  alert('El PDF se guardó en tu celular. Ahora puedes compartirlo desde WhatsApp o correo adjuntando el archivo.');
+}
+
+function savePDF() {
+  if (!pdfBlob) { alert('Error: no se encontró el PDF.'); return; }
+  
+  const fileName = getFileName();
+  
+  try {
+    // Create download link
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup after delay
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 3000);
+  } catch(err) {
+    console.error('Save failed:', err);
+    // Last resort: open as data URI
+    if (pdfDataUri) {
+      window.open(pdfDataUri, '_blank');
+    }
+  }
 }
 
 function resetAll() {
