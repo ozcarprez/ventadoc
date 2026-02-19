@@ -3,51 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VentaDoc — Documenta tu venta de auto en 5 minutos</title>
-<meta name="description" content="Contratos digitales para compraventa de autos usados. Fotos, identificaciones y firmas en un solo documento.">
+<title>VentaDoc — Contrato de compraventa de auto en 5 minutos</title>
+<meta name="description" content="Genera tu contrato de compraventa de auto en minutos. Sin papelería, sin copias, sin riesgo.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// Verify jsPDF loaded
-window.addEventListener('load', function() {
-  if (!window.jspdf) {
-    console.error('jsPDF not loaded, trying backup CDN');
-    var s = document.createElement('script');
-    s.src = 'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js';
-    document.head.appendChild(s);
-  }
-});
+  window.addEventListener('load', function() {
+    if (!window.jspdf) {
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js';
+      document.head.appendChild(s);
+    }
+  });
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box}
-
 :root{
---bg:#08090A;--surface:#111214;--surface2:#1A1B1E;--border:#252629;
---text:#F0F0EC;--text2:#8E8E8A;--text3:#5A5A57;
---accent:#C8FF3E;--accent2:#B0E636;--accentDim:rgba(200,255,62,0.08);
---error:#FF6B6B;--success:#4ECDC4;--warning:#FFD93D;
---radius:14px;
+  --bg:#08090A;--surface:#111214;--surface2:#1A1B1E;--border:#252629;
+  --text:#F0F0EC;--text2:#8E8E8A;--text3:#5A5A57;
+  --accent:#C8FF3E;--accent2:#B0E636;--accentDim:rgba(200,255,62,0.08);
+  --error:#FF6B6B;--success:#4ECDC4;--warning:#FFD93D;
+  --radius:14px;
 }
-
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-
-/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-@keyframes checkmark{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .fade-up{animation:fadeUp 0.5s ease both}
-.fade-in{animation:fadeIn 0.4s ease both}
 
 /* HEADER */
 .header{
-padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
-border-bottom:1px solid var(--border);position:sticky;top:0;
-background:rgba(8,9,10,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:100;
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);position:sticky;top:0;
+  background:rgba(8,9,10,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:100;
 }
 .logo{font-family:'Fraunces',serif;font-weight:800;font-size:21px;letter-spacing:-0.5px}
 .logo span{color:var(--accent)}
@@ -68,74 +58,80 @@ background:rgba(8,9,10,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:
 .landing h1{font-family:'Fraunces',serif;font-size:34px;font-weight:800;line-height:1.12;margin-bottom:14px;letter-spacing:-1.2px}
 .landing h1 em{font-style:italic;color:var(--accent)}
 .landing>p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:36px;max-width:360px;margin-left:auto;margin-right:auto}
-
 .features{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left}
 .feat{display:flex;gap:14px;align-items:center;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
 .feat-icon{width:40px;height:40px;border-radius:10px;background:var(--accentDim);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .feat-txt{font-size:14px;color:var(--text2);line-height:1.45}
 .feat-txt strong{color:var(--text);display:block;margin-bottom:1px}
-
 .story-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:28px;text-align:left;position:relative}
 .story-box::before{content:'"';position:absolute;top:8px;left:14px;font-family:'Fraunces',serif;font-size:48px;color:var(--accent);opacity:0.2;line-height:1}
 .story-box p{font-size:13px;color:var(--text2);line-height:1.6;padding-left:4px}
-.story-box strong{color:var(--error)}
 
-.price-pill{display:inline-flex;align-items:baseline;gap:4px;padding:8px 22px;background:var(--accentDim);border:1px solid rgba(200,255,62,0.15);border-radius:100px;margin-bottom:28px;font-size:13px;color:var(--accent)}
-.price-pill .big{font-family:'Fraunces',serif;font-size:30px;font-weight:700}
+/* PRICE BOX */
+.price-box{background:var(--surface);border:1px solid rgba(200,255,62,0.2);border-radius:var(--radius);padding:24px 20px;margin-bottom:28px;text-align:center}
+.price-box .price-label{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
+.price-box .price-amount{font-family:'Fraunces',serif;font-size:52px;font-weight:800;color:var(--accent);line-height:1;margin-bottom:4px}
+.price-box .price-desc{font-size:13px;color:var(--text2);margin-bottom:16px}
+.price-box .price-includes{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:16px}
+.price-box .price-includes li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);list-style:none}
+.price-box .price-includes li::before{content:'✓';color:var(--accent);font-weight:700;font-size:12px}
+
+/* PAYMENT SCREEN */
+.payment-screen{padding:48px 24px 120px;text-align:center}
+.payment-screen h2{font-family:'Fraunces',serif;font-size:28px;font-weight:700;margin-bottom:10px;letter-spacing:-0.5px}
+.payment-screen p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:32px}
+.payment-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+.payment-amount{font-family:'Fraunces',serif;font-size:48px;font-weight:800;color:var(--accent);margin-bottom:4px}
+.payment-what{font-size:14px;color:var(--text2);margin-bottom:24px}
+.mp-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;background:#009ee3;color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:12px}
+.mp-btn:hover{background:#007ec0;transform:translateY(-1px)}
+.mp-btn img{width:20px;height:20px}
+.already-paid{background:none;border:1px solid var(--border);color:var(--text2);border-radius:12px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all 0.2s}
+.already-paid:hover{border-color:var(--accent);color:var(--accent)}
+.payment-note{font-size:12px;color:var(--text3);line-height:1.5;margin-top:16px}
+.security-badges{display:flex;justify-content:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+.security-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
 
 /* FORM ELEMENTS */
 .form-section{padding:24px 20px 140px}
 .section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:4px;letter-spacing:-0.5px}
 .section-sub{color:var(--text2);font-size:14px;margin-bottom:28px;line-height:1.5}
 .section-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--accentDim);color:var(--accent);font-size:13px;font-weight:700;margin-bottom:12px}
-
 .field{margin-bottom:18px}
 .field label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:0.2px}
 .field input,.field select,.field textarea{
-width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);
-border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;
-transition:border-color 0.2s;outline:none;-webkit-appearance:none;
+  width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;
+  transition:border-color 0.2s;outline:none;-webkit-appearance:none;
 }
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
 .field input::placeholder{color:var(--text3)}
-.field select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238E8E8A' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
-.field select option{background:var(--surface2);color:var(--text)}
-
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 /* PHOTO UPLOAD */
 .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
 .photo-slot{
-aspect-ratio:4/3;background:var(--surface);border:2px dashed var(--border);
-border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;
-justify-content:center;gap:6px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;
+  aspect-ratio:4/3;background:var(--surface);border:2px dashed var(--border);
+  border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;
 }
 .photo-slot:hover{border-color:var(--accent);background:var(--accentDim)}
 .photo-slot .icon{font-size:28px;opacity:0.6}
 .photo-slot .label{font-size:11px;color:var(--text3);font-weight:500;text-align:center;padding:0 8px}
 .photo-slot.full{border-style:solid;border-color:var(--success)}
 .photo-slot.full img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
-.photo-slot.full .remove-photo{
-position:absolute;top:6px;right:6px;width:26px;height:26px;
-background:rgba(0,0,0,0.7);border:none;color:white;border-radius:50%;
-font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-}
+.photo-slot.full .remove-photo{position:absolute;top:6px;right:6px;width:26px;height:26px;background:rgba(0,0,0,0.7);border:none;color:white;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .photo-slot input[type="file"]{display:none}
-
 .photo-slot.wide{grid-column:span 2;aspect-ratio:16/9}
 
 /* BOTTOM BAR */
 .bottom-bar{
-position:fixed;bottom:0;left:0;right:0;padding:16px 20px;
-background:rgba(8,9,10,0.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-border-top:1px solid var(--border);z-index:100;
+  position:fixed;bottom:0;left:0;right:0;padding:16px 20px;
+  background:rgba(8,9,10,0.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);z-index:100;
 }
 .bottom-bar .inner{max-width:520px;margin:0 auto;display:flex;gap:10px}
-
-.btn{
-flex:1;padding:15px 20px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;
-font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;
-}
+.btn{flex:1;padding:15px 20px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;}
 .btn-primary{background:var(--accent);color:#0A0A0A}
 .btn-primary:hover{background:var(--accent2)}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed}
@@ -159,18 +155,14 @@ font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing
 .success-screen p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:32px}
 
 /* LOADING */
-.loading-overlay{
-position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,9,10,0.95);
-display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;z-index:200;
-}
+.loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,9,10,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;z-index:200;}
 .loading-overlay.show{display:flex}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
 .loading-text{color:var(--text2);font-size:15px}
 
-/* RESPONSIVE */
 @media(min-width:600px){
-.landing h1{font-size:42px}
-.photo-grid{grid-template-columns:1fr 1fr 1fr}
+  .landing h1{font-size:42px}
+  .photo-grid{grid-template-columns:1fr 1fr 1fr}
 }
 </style>
 </head>
@@ -178,285 +170,315 @@ display:none;align-items:center;justify-content:center;flex-direction:column;gap
 
 <!-- HEADER -->
 <header class="header" id="header">
-<button class="header-back" id="backBtn" onclick="goBack()">←</button>
-<div class="logo">Venta<span>Doc</span></div>
-<div class="step-pills" id="pills"></div>
+  <button class="header-back" id="backBtn" onclick="goBack()">←</button>
+  <div class="logo">Venta<span>Doc</span></div>
+  <div class="step-pills" id="pills"></div>
 </header>
 
 <!-- SCREEN 0: LANDING -->
 <div class="screen active" id="screen-0">
-<div class="landing fade-up">
-<div class="landing-badge"><span class="dot"></span> MVP Beta — Tijuana, BC</div>
-<h1>Documenta tu venta de auto en <em>5 minutos</em></h1>
-<p>Contrato digital con evidencia fotográfica, datos de ambas partes y copia para todos. Sin papelería, sin copias, sin riesgo.</p>
+  <div class="landing fade-up">
+    <div class="landing-badge"><span class="dot"></span> Tijuana, BC · México</div>
+    <h1>Cierra tu venta de auto con un <em>contrato real.</em></h1>
+    <p>Sin papelería, sin imprenta, sin riesgo. En 5 minutos tienes tu contrato PDF listo para compartir.</p>
 
-<div class="features">
-<div class="feat">
-<div class="feat-icon">🪪</div>
-<div class="feat-txt"><strong>Identificaciones</strong>Foto de la INE de ambas partes. Datos capturados en el contrato.</div>
-</div>
-<div class="feat">
-<div class="feat-icon">📸</div>
-<div class="feat-txt"><strong>Evidencia del auto</strong>VIN, kilometraje, estado exterior e interior. Todo con fecha y hora.</div>
-</div>
-<div class="feat">
-<div class="feat-icon">📄</div>
-<div class="feat-txt"><strong>Contrato PDF</strong>Se genera automáticamente con todos los datos. Copia para ambas partes.</div>
-</div>
-<div class="feat">
-<div class="feat-icon">🛡️</div>
-<div class="feat-txt"><strong>Protección legal</strong>Evidencia completa en caso de cualquier problema futuro.</div>
-</div>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">🪪</div>
+        <div class="feat-txt"><strong>Identificaciones</strong>Foto de la INE de ambas partes. Datos capturados automáticamente.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📸</div>
+        <div class="feat-txt"><strong>Evidencia del auto</strong>VIN, kilometraje, estado exterior e interior. Todo con fecha y hora.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📄</div>
+        <div class="feat-txt"><strong>Contrato PDF profesional</strong>Se genera automáticamente. Una copia para cada parte.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🛡️</div>
+        <div class="feat-txt"><strong>Protección legal</strong>Evidencia completa en caso de cualquier problema futuro.</div>
+      </div>
+    </div>
+
+    <div class="story-box">
+      <p>Normalmente vas a la papelería, sacas copias de tu INE, llenas todo a mano y las fotos se pierden en WhatsApp. Con VentaDoc llenas todo desde el celular y en 5 minutos tienes un PDF profesional con toda la evidencia organizada.</p>
+    </div>
+
+    <div class="price-box">
+      <div class="price-label">Precio por contrato</div>
+      <div class="price-amount">$99</div>
+      <div class="price-desc">pesos mexicanos · pago único</div>
+      <ul class="price-includes">
+        <li>Contrato de compraventa completo</li>
+        <li>Evidencia fotográfica incluida</li>
+        <li>PDF listo para compartir por WhatsApp</li>
+        <li>Una copia para cada parte</li>
+      </ul>
+      <button class="btn btn-primary" onclick="goToPayment()" style="width:100%;padding:16px">Generar mi contrato →</button>
+    </div>
+
+  </div>
 </div>
 
-<div class="story-box">
-<p>Cuando vendes un auto, normalmente vas a la papelería por un contrato genérico, sacas copias de tu INE, llenas todo a mano y tomas fotos con el celular que se pierden en WhatsApp. Con <strong style="color:var(--accent)">VentaDoc</strong>, llenas los datos en tu celular, tomas las fotos y en 5 minutos tienes un contrato PDF profesional con toda la evidencia organizada. Una copia para ti, una para el comprador.</p>
-</div>
+<!-- SCREEN PAGO -->
+<div class="screen" id="screen-pago">
+  <div class="payment-screen fade-up">
+    <div style="font-size:48px;margin-bottom:16px">🔒</div>
+    <h2>Un paso antes de tu contrato</h2>
+    <p>Completa el pago para continuar. En cuanto se confirme, llenamos los datos y generamos tu PDF.</p>
 
-<div class="price-pill"><span class="big">Gratis</span> durante la beta</div>
-<br><br>
-<button class="btn btn-primary" onclick="startFlow()" style="max-width:400px">Comenzar contrato →</button>
-</div>
+    <div class="payment-box">
+      <div class="payment-amount">$99</div>
+      <div class="payment-what">Contrato de compraventa de vehículo</div>
+      <a href="https://mpago.la/2o3LDqS" target="_blank" class="mp-btn" onclick="onPaymentClick()">
+        <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="white"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="22" font-weight="bold" fill="#009ee3">MP</text></svg>
+        Pagar con Mercado Pago
+      </a>
+      <button class="already-paid" onclick="confirmPayment()">
+        Ya pagué — continuar al contrato ✓
+      </button>
+    </div>
+
+    <div class="payment-note">
+      Al hacer click en "Pagar con Mercado Pago" se abrirá la página de pago en una nueva pestaña. Cuando termines, regresa aquí y haz click en "Ya pagué".
+    </div>
+
+    <div class="security-badges">
+      <div class="security-badge">🔒 Pago seguro</div>
+      <div class="security-badge">📱 Acepta tarjeta y transferencia</div>
+      <div class="security-badge">✅ Mercado Pago</div>
+    </div>
+  </div>
 </div>
 
 <!-- SCREEN 1: VENDEDOR -->
 <div class="screen" id="screen-1">
-<div class="form-section fade-up">
-<div class="section-num">1</div>
-<div class="section-title">Datos del vendedor</div>
-<p class="section-sub">Quien vende el vehículo. Llena los datos tal como aparecen en tu INE.</p>
-
-<div class="field">
-<label>Nombre completo</label>
-<input type="text" id="v_nombre" placeholder="Como aparece en tu INE" autocomplete="name">
-</div>
-<div class="row">
-<div class="field">
-<label>Teléfono</label>
-<input type="tel" id="v_telefono" placeholder="10 dígitos" autocomplete="tel">
-</div>
-<div class="field">
-<label>Email (opcional)</label>
-<input type="email" id="v_email" placeholder="correo@ejemplo.com" autocomplete="email">
-</div>
-</div>
-<div class="field">
-<label>Domicilio</label>
-<input type="text" id="v_domicilio" placeholder="Calle, número, colonia, ciudad" autocomplete="street-address">
-</div>
-<div class="field">
-<label>Clave de elector (INE)</label>
-<input type="text" id="v_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase">
-</div>
-
-<div class="field">
-<label>Foto de tu INE (frente)</label>
-<div class="photo-grid">
-<div class="photo-slot wide" id="slot-v-ine-frente" onclick="triggerPhoto(this,'v_ine_frente')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-v-ine-frente','v_ine_frente')">
-<span class="icon">🪪</span>
-<span class="label">Toca para tomar foto del frente de tu INE</span>
-</div>
-</div>
-</div>
-</div>
+  <div class="form-section fade-up">
+    <div class="section-num">1</div>
+    <div class="section-title">Datos del vendedor</div>
+    <p class="section-sub">Quien vende el vehículo. Llena los datos tal como aparecen en tu INE.</p>
+    <div class="field">
+      <label>Nombre completo</label>
+      <input type="text" id="v_nombre" placeholder="Como aparece en tu INE" autocomplete="name">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Teléfono</label>
+        <input type="tel" id="v_telefono" placeholder="10 dígitos" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label>Email (opcional)</label>
+        <input type="email" id="v_email" placeholder="correo@ejemplo.com" autocomplete="email">
+      </div>
+    </div>
+    <div class="field">
+      <label>Domicilio</label>
+      <input type="text" id="v_domicilio" placeholder="Calle, número, colonia, ciudad" autocomplete="street-address">
+    </div>
+    <div class="field">
+      <label>Clave de elector (INE)</label>
+      <input type="text" id="v_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase">
+    </div>
+    <div class="field">
+      <label>Foto de tu INE</label>
+      <div class="photo-grid">
+        <div class="photo-slot" id="slot-v-ine-frente" onclick="triggerPhoto(this,'v_ine_frente')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-v-ine-frente','v_ine_frente')">
+          <span class="icon">🪪</span>
+          <span class="label">Frente</span>
+        </div>
+        <div class="photo-slot" id="slot-v-ine-reverso" onclick="triggerPhoto(this,'v_ine_reverso')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-v-ine-reverso','v_ine_reverso')">
+          <span class="icon">🪪</span>
+          <span class="label">Reverso</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- SCREEN 2: COMPRADOR -->
 <div class="screen" id="screen-2">
-<div class="form-section fade-up">
-<div class="section-num">2</div>
-<div class="section-title">Datos del comprador</div>
-<p class="section-sub">Quien compra el vehículo. Pídele su INE y llena sus datos.</p>
-
-<div class="field">
-<label>Nombre completo</label>
-<input type="text" id="c_nombre" placeholder="Como aparece en su INE">
-</div>
-<div class="row">
-<div class="field">
-<label>Teléfono</label>
-<input type="tel" id="c_telefono" placeholder="10 dígitos">
-</div>
-<div class="field">
-<label>Email (opcional)</label>
-<input type="email" id="c_email" placeholder="correo@ejemplo.com">
-</div>
-</div>
-<div class="field">
-<label>Domicilio</label>
-<input type="text" id="c_domicilio" placeholder="Calle, número, colonia, ciudad">
-</div>
-<div class="field">
-<label>Clave de elector (INE)</label>
-<input type="text" id="c_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase">
-</div>
-
-<div class="field">
-<label>Foto de su INE (frente)</label>
-<div class="photo-grid">
-<div class="photo-slot wide" id="slot-c-ine-frente" onclick="triggerPhoto(this,'c_ine_frente')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-c-ine-frente','c_ine_frente')">
-<span class="icon">🪪</span>
-<span class="label">Toca para tomar foto del frente de su INE</span>
-</div>
-</div>
-</div>
-</div>
+  <div class="form-section fade-up">
+    <div class="section-num">2</div>
+    <div class="section-title">Datos del comprador</div>
+    <p class="section-sub">Quien compra el vehículo. Pídele su INE y llena sus datos.</p>
+    <div class="field">
+      <label>Nombre completo</label>
+      <input type="text" id="c_nombre" placeholder="Como aparece en su INE">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Teléfono</label>
+        <input type="tel" id="c_telefono" placeholder="10 dígitos">
+      </div>
+      <div class="field">
+        <label>Email (opcional)</label>
+        <input type="email" id="c_email" placeholder="correo@ejemplo.com">
+      </div>
+    </div>
+    <div class="field">
+      <label>Domicilio</label>
+      <input type="text" id="c_domicilio" placeholder="Calle, número, colonia, ciudad">
+    </div>
+    <div class="field">
+      <label>Clave de elector (INE)</label>
+      <input type="text" id="c_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase">
+    </div>
+    <div class="field">
+      <label>Foto de su INE</label>
+      <div class="photo-grid">
+        <div class="photo-slot" id="slot-c-ine-frente" onclick="triggerPhoto(this,'c_ine_frente')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-c-ine-frente','c_ine_frente')">
+          <span class="icon">🪪</span>
+          <span class="label">Frente</span>
+        </div>
+        <div class="photo-slot" id="slot-c-ine-reverso" onclick="triggerPhoto(this,'c_ine_reverso')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-c-ine-reverso','c_ine_reverso')">
+          <span class="icon">🪪</span>
+          <span class="label">Reverso</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- SCREEN 3: AUTO -->
 <div class="screen" id="screen-3">
-<div class="form-section fade-up">
-<div class="section-num">3</div>
-<div class="section-title">Datos del vehículo</div>
-<p class="section-sub">Información del auto que se vende. Revisa la tarjeta de circulación.</p>
+  <div class="form-section fade-up">
+    <div class="section-num">3</div>
+    <div class="section-title">Datos del vehículo</div>
+    <p class="section-sub">Información del auto que se vende. Revisa la tarjeta de circulación.</p>
+    <div class="row">
+      <div class="field">
+        <label>Marca</label>
+        <input type="text" id="a_marca" placeholder="Ej: Honda, Toyota">
+      </div>
+      <div class="field">
+        <label>Modelo</label>
+        <input type="text" id="a_modelo" placeholder="Ej: Civic, Corolla">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Año</label>
+        <input type="number" id="a_año" placeholder="Ej: 2018" min="1970" max="2027">
+      </div>
+      <div class="field">
+        <label>Color</label>
+        <input type="text" id="a_color" placeholder="Ej: Blanco">
+      </div>
+    </div>
+    <div class="field">
+      <label>Número de serie (VIN)</label>
+      <input type="text" id="a_vin" placeholder="17 caracteres" maxlength="17" style="text-transform:uppercase">
+    </div>
+    <div class="field">
+      <label>Placas</label>
+      <input type="text" id="a_placas" placeholder="Ej: ABC-123" style="text-transform:uppercase">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Kilometraje</label>
+        <input type="number" id="a_km" placeholder="Ej: 85000">
+      </div>
+      <div class="field">
+        <label>Precio de venta (MXN)</label>
+        <input type="number" id="a_precio" placeholder="Ej: 120000">
+      </div>
+    </div>
+  </div>
+</div>
 
-<div class="row">
-<div class="field">
-<label>Marca</label>
-<input type="text" id="a_marca" placeholder="Ej: Honda, Toyota">
-</div>
-<div class="field">
-<label>Modelo</label>
-<input type="text" id="a_modelo" placeholder="Ej: Civic, Corolla">
-</div>
-</div>
-<div class="row">
-<div class="field">
-<label>Año</label>
-<input type="number" id="a_año" placeholder="Ej: 2018" min="1970" max="2027">
-</div>
-<div class="field">
-<label>Color</label>
-<input type="text" id="a_color" placeholder="Ej: Blanco">
-</div>
-</div>
-<div class="field">
-<label>Número de serie (VIN)</label>
-<input type="text" id="a_vin" placeholder="17 caracteres" maxlength="17" style="text-transform:uppercase">
-</div>
-<div class="field">
-<label>Placas</label>
-<input type="text" id="a_placas" placeholder="Ej: ABC-123" style="text-transform:uppercase">
-</div>
-<div class="row">
-<div class="field">
-<label>Kilometraje</label>
-<input type="number" id="a_km" placeholder="Ej: 85000">
-</div>
-<div class="field">
-<label>Precio de venta (MXN)</label>
-<input type="number" id="a_precio" placeholder="Ej: 120000">
-</div>
-</div>
-</div>
-</div>
-
-<!-- SCREEN 4: FOTOS DEL AUTO -->
+<!-- SCREEN 4: FOTOS -->
 <div class="screen" id="screen-4">
-<div class="form-section fade-up">
-<div class="section-num">4</div>
-<div class="section-title">Fotos del vehículo</div>
-<p class="section-sub">Toma fotos del estado actual del auto. Estas quedarán en el contrato como evidencia.</p>
-
-<div class="field">
-<label>Fotos obligatorias</label>
-<div class="photo-grid">
-<div class="photo-slot" id="slot-foto-vin" onclick="triggerPhoto(this,'foto_vin')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-vin','foto_vin')">
-<span class="icon">🔢</span>
-<span class="label">VIN / Número de serie</span>
-</div>
-<div class="photo-slot" id="slot-foto-km" onclick="triggerPhoto(this,'foto_km')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-km','foto_km')">
-<span class="icon">🔄</span>
-<span class="label">Kilometraje</span>
-</div>
-<div class="photo-slot" id="slot-foto-frente" onclick="triggerPhoto(this,'foto_frente')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-frente','foto_frente')">
-<span class="icon">🚗</span>
-<span class="label">Frente del auto</span>
-</div>
-<div class="photo-slot" id="slot-foto-trasera" onclick="triggerPhoto(this,'foto_trasera')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-trasera','foto_trasera')">
-<span class="icon">🚙</span>
-<span class="label">Parte trasera</span>
-</div>
-</div>
-</div>
-
-<div class="field">
-<label>Fotos opcionales (daños, detalles)</label>
-<div class="photo-grid">
-<div class="photo-slot" id="slot-foto-extra1" onclick="triggerPhoto(this,'foto_extra1')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-extra1','foto_extra1')">
-<span class="icon">➕</span>
-<span class="label">Foto adicional</span>
-</div>
-<div class="photo-slot" id="slot-foto-extra2" onclick="triggerPhoto(this,'foto_extra2')">
-<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-extra2','foto_extra2')">
-<span class="icon">➕</span>
-<span class="label">Foto adicional</span>
-</div>
-</div>
-</div>
-
-<div class="field">
-<label>Observaciones (opcional)</label>
-<textarea id="a_observaciones" rows="3" placeholder="Detalles adicionales: golpes, fallas mecánicas, acuerdos especiales..." style="width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;resize:vertical;outline:none"></textarea>
-</div>
-</div>
+  <div class="form-section fade-up">
+    <div class="section-num">4</div>
+    <div class="section-title">Fotos del vehículo</div>
+    <p class="section-sub">Toma fotos del estado actual del auto. Quedarán en el contrato como evidencia.</p>
+    <div class="field">
+      <label>Fotos obligatorias</label>
+      <div class="photo-grid">
+        <div class="photo-slot" id="slot-foto-vin" onclick="triggerPhoto(this,'foto_vin')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-vin','foto_vin')">
+          <span class="icon">🔢</span><span class="label">VIN / Número de serie</span>
+        </div>
+        <div class="photo-slot" id="slot-foto-km" onclick="triggerPhoto(this,'foto_km')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-km','foto_km')">
+          <span class="icon">🔄</span><span class="label">Kilometraje</span>
+        </div>
+        <div class="photo-slot" id="slot-foto-frente" onclick="triggerPhoto(this,'foto_frente')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-frente','foto_frente')">
+          <span class="icon">🚗</span><span class="label">Frente del auto</span>
+        </div>
+        <div class="photo-slot" id="slot-foto-trasera" onclick="triggerPhoto(this,'foto_trasera')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-trasera','foto_trasera')">
+          <span class="icon">🚙</span><span class="label">Parte trasera</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Fotos opcionales (daños, detalles)</label>
+      <div class="photo-grid">
+        <div class="photo-slot" id="slot-foto-extra1" onclick="triggerPhoto(this,'foto_extra1')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-extra1','foto_extra1')">
+          <span class="icon">➕</span><span class="label">Foto adicional</span>
+        </div>
+        <div class="photo-slot" id="slot-foto-extra2" onclick="triggerPhoto(this,'foto_extra2')">
+          <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-foto-extra2','foto_extra2')">
+          <span class="icon">➕</span><span class="label">Foto adicional</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Observaciones (opcional)</label>
+      <textarea id="a_observaciones" rows="3" placeholder="Detalles adicionales: golpes, fallas mecánicas, acuerdos especiales..." style="width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;resize:vertical;outline:none"></textarea>
+    </div>
+  </div>
 </div>
 
 <!-- SCREEN 5: REVIEW -->
 <div class="screen" id="screen-5">
-<div class="form-section fade-up">
-<div class="section-num">✓</div>
-<div class="section-title">Revisa el contrato</div>
-<p class="section-sub">Verifica que todos los datos sean correctos antes de generar el PDF.</p>
-
-<div class="review-card" id="review-vendedor">
-<h3>🟢 Vendedor</h3>
-</div>
-<div class="review-card" id="review-comprador">
-<h3>🔵 Comprador</h3>
-</div>
-<div class="review-card" id="review-auto">
-<h3>🚗 Vehículo</h3>
-</div>
-<div class="review-card" id="review-fotos">
-<h3>📸 Evidencia fotográfica</h3>
-<div class="review-photos" id="review-photos-grid"></div>
-</div>
-</div>
+  <div class="form-section fade-up">
+    <div class="section-num">✓</div>
+    <div class="section-title">Revisa el contrato</div>
+    <p class="section-sub">Verifica que todos los datos sean correctos antes de generar el PDF.</p>
+    <div class="review-card" id="review-vendedor"><h3>🟢 Vendedor</h3></div>
+    <div class="review-card" id="review-comprador"><h3>🔵 Comprador</h3></div>
+    <div class="review-card" id="review-auto"><h3>🚗 Vehículo</h3></div>
+    <div class="review-card" id="review-fotos">
+      <h3>📸 Evidencia fotográfica</h3>
+      <div class="review-photos" id="review-photos-grid"></div>
+    </div>
+  </div>
 </div>
 
 <!-- SCREEN 6: SUCCESS -->
 <div class="screen" id="screen-6">
-<div class="success-screen fade-up">
-<div class="success-icon">✅</div>
-<h2>¡Contrato generado!</h2>
-<p>Comparte el PDF con el comprador para que ambos tengan copia del contrato.</p>
-<button class="btn btn-primary" onclick="sharePDF()" style="margin-bottom:14px">📤 Compartir contrato</button>
-<button class="btn btn-ghost" onclick="savePDF()" style="flex:1;width:100%">📄 Guardar PDF en mi celular</button>
-<br><br>
-<button class="btn btn-ghost" onclick="resetAll()" style="flex:1;width:100%;margin-top:8px">Crear otro contrato</button>
-</div>
+  <div class="success-screen fade-up">
+    <div class="success-icon">✅</div>
+    <h2>¡Contrato generado!</h2>
+    <p>Comparte el PDF con el comprador para que ambos tengan copia del contrato.</p>
+    <button class="btn btn-primary" onclick="sharePDF()" style="margin-bottom:14px;width:100%">📤 Compartir contrato</button>
+    <button class="btn btn-ghost" onclick="savePDF()" style="flex:1;width:100%">📄 Guardar PDF en mi celular</button>
+    <br><br>
+    <button class="btn btn-ghost" onclick="resetAll()" style="flex:1;width:100%;margin-top:8px">Crear otro contrato</button>
+  </div>
 </div>
 
 <!-- BOTTOM BAR -->
 <div class="bottom-bar" id="bottomBar" style="display:none">
-<div class="inner">
-<button class="btn btn-ghost" id="btnBack" onclick="goBack()">Atrás</button>
-<button class="btn btn-primary" id="btnNext" onclick="goNext()">Siguiente →</button>
-</div>
+  <div class="inner">
+    <button class="btn btn-ghost" id="btnBack" onclick="goBack()">Atrás</button>
+    <button class="btn btn-primary" id="btnNext" onclick="goNext()">Siguiente →</button>
+  </div>
 </div>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loading">
-<div class="spinner"></div>
-<div class="loading-text">Generando contrato PDF...</div>
+  <div class="spinner"></div>
+  <div class="loading-text">Generando contrato PDF...</div>
 </div>
 
 <script>
@@ -464,16 +486,28 @@ display:none;align-items:center;justify-content:center;flex-direction:column;gap
 let currentScreen = 0;
 const totalSteps = 5;
 const photos = {};
+let paymentDone = false;
+
+// ===== PAYMENT =====
+function goToPayment() {
+  showScreen('pago');
+}
+
+function onPaymentClick() {
+  // Mark that user clicked payment — they'll confirm when back
+  localStorage.setItem('vd_payment_clicked', '1');
+}
+
+function confirmPayment() {
+  paymentDone = true;
+  showScreen(1);
+}
 
 // ===== NAVIGATION =====
 function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const screen = document.getElementById(`screen-${n}`);
   screen.classList.add('active');
-  screen.querySelector('.fade-up,.form-section')?.classList.remove('fade-up');
-  void screen.offsetWidth;
-  screen.querySelector('.form-section')?.classList.add('fade-up');
-  
   currentScreen = n;
   updateUI();
   window.scrollTo(0, 0);
@@ -483,20 +517,22 @@ function updateUI() {
   const bar = document.getElementById('bottomBar');
   const back = document.getElementById('backBtn');
   const btnBack = document.getElementById('btnBack');
-  
-  if (currentScreen === 0 || currentScreen === 6) {
+
+  const isFormScreen = typeof currentScreen === 'number' && currentScreen >= 1 && currentScreen <= 5;
+
+  if (currentScreen === 0 || currentScreen === 6 || currentScreen === 'pago') {
     bar.style.display = 'none';
-    back.style.display = 'none';
+    back.style.display = currentScreen === 'pago' ? 'block' : 'none';
   } else {
     bar.style.display = 'block';
     back.style.display = 'block';
     btnBack.style.display = currentScreen === 1 ? 'none' : '';
   }
-  
-  // Update pills
+
+  // Pills
   const pills = document.getElementById('pills');
   pills.innerHTML = '';
-  if (currentScreen >= 1 && currentScreen <= 5) {
+  if (isFormScreen) {
     for (let i = 1; i <= totalSteps; i++) {
       const p = document.createElement('div');
       p.className = 'pill';
@@ -505,32 +541,23 @@ function updateUI() {
       pills.appendChild(p);
     }
   }
-  
-  // Update next button
+
   const btnNext = document.getElementById('btnNext');
-  if (currentScreen === 5) {
-    btnNext.textContent = '📄 Generar contrato';
-  } else {
-    btnNext.textContent = 'Siguiente →';
+  if (btnNext) {
+    btnNext.textContent = currentScreen === 5 ? '📄 Generar contrato' : 'Siguiente →';
   }
 }
 
-function startFlow() { showScreen(1); }
-
 function goBack() {
-  if (currentScreen > 1) showScreen(currentScreen - 1);
-  else if (currentScreen === 1) showScreen(0);
+  if (currentScreen === 'pago') showScreen(0);
+  else if (currentScreen > 1) showScreen(currentScreen - 1);
+  else if (currentScreen === 1) showScreen('pago');
 }
 
 function goNext() {
-  if (currentScreen === 5) {
-    generatePDF();
-    return;
-  }
+  if (currentScreen === 5) { generatePDF(); return; }
   if (validateScreen(currentScreen)) {
-    if (currentScreen === 4) {
-      buildReview();
-    }
+    if (currentScreen === 4) buildReview();
     showScreen(currentScreen + 1);
   }
 }
@@ -544,18 +571,15 @@ function validateScreen(n) {
     case 3: required = ['a_marca','a_modelo','a_año','a_color','a_vin','a_placas','a_precio']; break;
     case 4: return true;
   }
-  
   let valid = true;
   required.forEach(id => {
     const el = document.getElementById(id);
     if (!el.value.trim()) {
       el.style.borderColor = 'var(--error)';
       valid = false;
-      if (!document.querySelector('.shake')) el.classList.add('shake');
       setTimeout(() => { el.style.borderColor = ''; }, 2000);
     }
   });
-  
   if (!valid) {
     const first = required.find(id => !document.getElementById(id).value.trim());
     document.getElementById(first)?.focus();
@@ -573,8 +597,6 @@ function triggerPhoto(slot, key) {
 function handlePhoto(event, slotId, key) {
   const file = event.target.files[0];
   if (!file) return;
-  
-  // Compress image before storing
   const reader = new FileReader();
   reader.onload = function(e) {
     const img = new Image();
@@ -586,20 +608,13 @@ function handlePhoto(event, slotId, key) {
         if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
         else { w = Math.round(w * maxSize / h); h = maxSize; }
       }
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       const compressed = canvas.toDataURL('image/jpeg', 0.7);
-      
       photos[key] = compressed;
       const slot = document.getElementById(slotId);
       slot.classList.add('full');
-      slot.innerHTML = `
-        <img src="${compressed}" alt="${key}">
-        <button class="remove-photo" onclick="removePhoto(event,'${slotId}','${key}')">✕</button>
-        <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'${slotId}','${key}')">
-      `;
+      slot.innerHTML = `<img src="${compressed}" alt="${key}"><button class="remove-photo" onclick="removePhoto(event,'${slotId}','${key}')">✕</button><input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'${slotId}','${key}')">`;
     };
     img.src = e.target.result;
   };
@@ -611,94 +626,65 @@ function removePhoto(event, slotId, key) {
   delete photos[key];
   const slot = document.getElementById(slotId);
   slot.classList.remove('full');
-  
   const labels = {
-    v_ine_frente: '🪪|Toca para tomar foto del frente de tu INE',
-    c_ine_frente: '🪪|Toca para tomar foto del frente de su INE',
-    foto_vin: '🔢|VIN / Número de serie',
-    foto_km: '🔄|Kilometraje',
-    foto_frente: '🚗|Frente del auto',
-    foto_trasera: '🚙|Parte trasera',
-    foto_extra1: '➕|Foto adicional',
-    foto_extra2: '➕|Foto adicional',
+    v_ine_frente:'🪪|Frente',
+    v_ine_reverso:'🪪|Reverso',
+    c_ine_frente:'🪪|Frente',
+    c_ine_reverso:'🪪|Reverso',
+    foto_vin:'🔢|VIN / Número de serie', foto_km:'🔄|Kilometraje',
+    foto_frente:'🚗|Frente del auto', foto_trasera:'🚙|Parte trasera',
+    foto_extra1:'➕|Foto adicional', foto_extra2:'➕|Foto adicional',
   };
   const [icon, label] = (labels[key] || '📷|Foto').split('|');
-  slot.innerHTML = `
-    <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'${slotId}','${key}')">
-    <span class="icon">${icon}</span>
-    <span class="label">${label}</span>
-  `;
+  slot.innerHTML = `<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'${slotId}','${key}')"><span class="icon">${icon}</span><span class="label">${label}</span>`;
 }
 
 // ===== REVIEW =====
 function buildReview() {
   const v = (id) => document.getElementById(id).value || '—';
-  const fmt = (n) => {
-    const num = parseInt(n);
-    return isNaN(num) ? '—' : '$' + num.toLocaleString('es-MX');
-  };
-  
-  document.getElementById('review-vendedor').innerHTML = `
-    <h3>🟢 Vendedor</h3>
+  const fmt = (n) => { const num = parseInt(n); return isNaN(num) ? '—' : '$' + num.toLocaleString('es-MX'); };
+
+  document.getElementById('review-vendedor').innerHTML = `<h3>🟢 Vendedor</h3>
     <div class="review-row"><span class="rlabel">Nombre</span><span class="rvalue">${v('v_nombre')}</span></div>
     <div class="review-row"><span class="rlabel">Teléfono</span><span class="rvalue">${v('v_telefono')}</span></div>
-    <div class="review-row"><span class="rlabel">Email</span><span class="rvalue">${v('v_email') || '—'}</span></div>
     <div class="review-row"><span class="rlabel">Domicilio</span><span class="rvalue">${v('v_domicilio')}</span></div>
-    <div class="review-row"><span class="rlabel">Clave INE</span><span class="rvalue">${v('v_ine')}</span></div>
-  `;
-  
-  document.getElementById('review-comprador').innerHTML = `
-    <h3>🔵 Comprador</h3>
+    <div class="review-row"><span class="rlabel">Clave INE</span><span class="rvalue">${v('v_ine')}</span></div>`;
+
+  document.getElementById('review-comprador').innerHTML = `<h3>🔵 Comprador</h3>
     <div class="review-row"><span class="rlabel">Nombre</span><span class="rvalue">${v('c_nombre')}</span></div>
     <div class="review-row"><span class="rlabel">Teléfono</span><span class="rvalue">${v('c_telefono')}</span></div>
-    <div class="review-row"><span class="rlabel">Email</span><span class="rvalue">${v('c_email') || '—'}</span></div>
     <div class="review-row"><span class="rlabel">Domicilio</span><span class="rvalue">${v('c_domicilio')}</span></div>
-    <div class="review-row"><span class="rlabel">Clave INE</span><span class="rvalue">${v('c_ine')}</span></div>
-  `;
-  
-  document.getElementById('review-auto').innerHTML = `
-    <h3>🚗 Vehículo</h3>
+    <div class="review-row"><span class="rlabel">Clave INE</span><span class="rvalue">${v('c_ine')}</span></div>`;
+
+  document.getElementById('review-auto').innerHTML = `<h3>🚗 Vehículo</h3>
     <div class="review-row"><span class="rlabel">Marca / Modelo</span><span class="rvalue">${v('a_marca')} ${v('a_modelo')}</span></div>
     <div class="review-row"><span class="rlabel">Año</span><span class="rvalue">${v('a_año')}</span></div>
     <div class="review-row"><span class="rlabel">Color</span><span class="rvalue">${v('a_color')}</span></div>
     <div class="review-row"><span class="rlabel">VIN</span><span class="rvalue" style="font-size:12px">${v('a_vin')}</span></div>
     <div class="review-row"><span class="rlabel">Placas</span><span class="rvalue">${v('a_placas')}</span></div>
     <div class="review-row"><span class="rlabel">Kilometraje</span><span class="rvalue">${v('a_km') ? parseInt(v('a_km')).toLocaleString('es-MX') + ' km' : '—'}</span></div>
-    <div class="review-row"><span class="rlabel">Precio</span><span class="rvalue" style="color:var(--accent);font-weight:700">${fmt(v('a_precio'))}</span></div>
-  `;
-  
+    <div class="review-row"><span class="rlabel">Precio</span><span class="rvalue" style="color:var(--accent);font-weight:700">${fmt(v('a_precio'))}</span></div>`;
+
   const grid = document.getElementById('review-photos-grid');
   grid.innerHTML = '';
-  const photoLabels = {
-    v_ine_frente:'INE Vendedor', c_ine_frente:'INE Comprador',
-    foto_vin:'VIN', foto_km:'Kilometraje', foto_frente:'Frente', foto_trasera:'Trasera',
-    foto_extra1:'Extra 1', foto_extra2:'Extra 2'
-  };
-  Object.keys(photos).forEach(key => {
-    grid.innerHTML += `<img src="${photos[key]}" title="${photoLabels[key]||key}">`;
-  });
-  if (Object.keys(photos).length === 0) {
-    grid.innerHTML = '<p style="color:var(--text3);font-size:13px">No se tomaron fotos</p>';
-  }
+  const photoLabels = { v_ine_frente:'INE Vendedor (frente)', v_ine_reverso:'INE Vendedor (reverso)', c_ine_frente:'INE Comprador (frente)', c_ine_reverso:'INE Comprador (reverso)', foto_vin:'VIN', foto_km:'Kilometraje', foto_frente:'Frente', foto_trasera:'Trasera', foto_extra1:'Extra 1', foto_extra2:'Extra 2' };
+  Object.keys(photos).forEach(key => { grid.innerHTML += `<img src="${photos[key]}" title="${photoLabels[key]||key}">`; });
+  if (Object.keys(photos).length === 0) grid.innerHTML = '<p style="color:var(--text3);font-size:13px">No se tomaron fotos</p>';
 }
 
-// ===== PDF GENERATION =====
+// ===== PDF =====
 let pdfBlob = null;
 let pdfDataUri = null;
 
 async function generatePDF() {
   const loading = document.getElementById('loading');
   loading.classList.add('show');
-  
   await new Promise(r => setTimeout(r, 300));
-  
-  // Check jsPDF is available
   if (!window.jspdf || !window.jspdf.jsPDF) {
     loading.classList.remove('show');
-    alert('Error: La librería de PDF no se cargó. Verifica tu conexión a internet y recarga la página.');
+    alert('Error: La librería de PDF no se cargó. Verifica tu conexión y recarga la página.');
     return;
   }
-  
   try {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'letter');
@@ -706,222 +692,103 @@ async function generatePDF() {
     const margin = 20;
     const contentW = w - margin * 2;
     let y = 20;
-    
     const v = (id) => { try { return document.getElementById(id)?.value || ''; } catch(e) { return ''; } };
     const now = new Date();
     const dateStr = now.toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
-    const fmt = (n) => {
-      const num = parseInt(n);
-      return isNaN(num) ? '' : '$' + num.toLocaleString('es-MX') + ' MXN';
-    };
-    
-    // Helper to add text with word wrap
+    const fmt = (n) => { const num = parseInt(n); return isNaN(num) ? '' : '$' + num.toLocaleString('es-MX') + ' MXN'; };
+
     function addText(text, x, yPos, opts = {}) {
       const size = opts.size || 10;
-      const maxW = opts.maxW || contentW;
       doc.setFontSize(size);
       doc.setFont('helvetica', opts.style || 'normal');
-      if (opts.color) doc.setTextColor(...opts.color);
-      else doc.setTextColor(30, 30, 30);
-      
-      const lines = doc.splitTextToSize(text, maxW);
+      if (opts.color) doc.setTextColor(...opts.color); else doc.setTextColor(30, 30, 30);
+      const lines = doc.splitTextToSize(text, opts.maxW || contentW);
       lines.forEach(line => {
-        if (yPos > 250) {
-          doc.addPage();
-          yPos = 20;
-        }
+        if (yPos > 250) { doc.addPage(); yPos = 20; }
         doc.text(line, x, yPos);
         yPos += size * 0.45;
       });
       return yPos;
     }
-    
-    function addLine(yPos) {
-      doc.setDrawColor(200, 200, 200);
-      doc.line(margin, yPos, w - margin, yPos);
-      return yPos + 6;
-    }
-    
-    function checkPage(yPos, needed = 30) {
-      if (yPos + needed > 250) {
-        doc.addPage();
-        return 20;
-      }
-      return yPos;
-    }
-    
-    // ===== HEADER =====
-    doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 30, 30);
-    doc.text('CONTRATO DE COMPRAVENTA', margin, y);
-    y += 7;
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 100, 100);
-    doc.text('DE VEHÍCULO USADO ENTRE PARTICULARES', margin, y);
-    y += 5;
-    
-    doc.setFontSize(9);
-    doc.text(`Generado por VentaDoc — ${dateStr}`, margin, y);
-    y += 4;
-    doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text(`ID: VD-${Date.now().toString(36).toUpperCase()}`, margin, y);
-    y += 6;
+
+    function addLine(yPos) { doc.setDrawColor(200,200,200); doc.line(margin, yPos, w-margin, yPos); return yPos + 6; }
+    function checkPage(yPos, needed = 30) { if (yPos + needed > 250) { doc.addPage(); return 20; } return yPos; }
+
+    // Header
+    doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,30);
+    doc.text('CONTRATO DE COMPRAVENTA', margin, y); y += 7;
+    doc.setFontSize(12); doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+    doc.text('DE VEHÍCULO USADO ENTRE PARTICULARES', margin, y); y += 5;
+    doc.setFontSize(9); doc.text(`Generado por VentaDoc — ${dateStr}`, margin, y); y += 4;
+    doc.setFontSize(8); doc.setTextColor(150,150,150); doc.text(`ID: VD-${Date.now().toString(36).toUpperCase()}`, margin, y); y += 6;
     y = addLine(y);
-    
-    // ===== CONTRACT TEXT =====
+
     const ciudad = 'Tijuana, Baja California';
-    const contractText = `En la ciudad de ${ciudad}, a ${now.toLocaleDateString('es-MX', {day:'numeric',month:'long',year:'numeric'})}, comparecen por una parte como VENDEDOR(A): ${v('v_nombre')}, con domicilio en ${v('v_domicilio')}, con clave de elector ${v('v_ine').toUpperCase()}, teléfono ${v('v_telefono')}; y por otra parte como COMPRADOR(A): ${v('c_nombre')}, con domicilio en ${v('c_domicilio')}, con clave de elector ${v('c_ine').toUpperCase()}, teléfono ${v('c_telefono')}; quienes por su propio derecho celebran el presente contrato de compraventa de vehículo usado, al tenor de las siguientes:`;
-    
-    y = addText(contractText, margin, y, { size: 10 });
-    y += 4;
-    
-    // CLAUSES
-    y = addText('CLÁUSULAS', margin, y, { size: 12, style: 'bold' });
-    y += 2;
-    
-    const vehicleDesc = `${v('a_marca')} ${v('a_modelo')} ${v('a_año')}, color ${v('a_color')}, con número de serie (VIN): ${v('a_vin').toUpperCase()}, placas: ${v('a_placas').toUpperCase()}, con kilometraje de ${v('a_km') ? parseInt(v('a_km')).toLocaleString('es-MX') : 'N/A'} km al momento de la venta.`;
-    
+    const contractText = `En la ciudad de ${ciudad}, a ${now.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'})}, comparecen por una parte como VENDEDOR(A): ${v('v_nombre')}, con domicilio en ${v('v_domicilio')}, con clave de elector ${v('v_ine').toUpperCase()}, teléfono ${v('v_telefono')}; y por otra parte como COMPRADOR(A): ${v('c_nombre')}, con domicilio en ${v('c_domicilio')}, con clave de elector ${v('c_ine').toUpperCase()}, teléfono ${v('c_telefono')}; quienes celebran el presente contrato de compraventa de vehículo usado:`;
+    y = addText(contractText, margin, y, {size:10}); y += 4;
+
+    y = addText('CLÁUSULAS', margin, y, {size:12, style:'bold'}); y += 2;
+    const vehicleDesc = `${v('a_marca')} ${v('a_modelo')} ${v('a_año')}, color ${v('a_color')}, VIN: ${v('a_vin').toUpperCase()}, placas: ${v('a_placas').toUpperCase()}, kilometraje: ${v('a_km') ? parseInt(v('a_km')).toLocaleString('es-MX') : 'N/A'} km.`;
     const clauses = [
-      `PRIMERA.- OBJETO. El VENDEDOR transfiere la propiedad del siguiente vehículo al COMPRADOR: ${vehicleDesc}`,
-      `SEGUNDA.- PRECIO. El precio pactado por ambas partes para la compraventa del vehículo descrito es de ${fmt(v('a_precio'))} (${numberToWords(parseInt(v('a_precio')))} pesos mexicanos), que el COMPRADOR paga al VENDEDOR en este acto.`,
-      `TERCERA.- CONDICIONES. El COMPRADOR declara que ha revisado el vehículo y lo acepta en el estado físico y mecánico en que se encuentra al momento de esta operación. ${v('a_observaciones') ? 'Observaciones: ' + v('a_observaciones') : ''}`,
-      `CUARTA.- RESPONSABILIDAD. A partir de la generación del presente contrato, el COMPRADOR asume toda responsabilidad civil, penal y administrativa sobre el vehículo. El VENDEDOR queda libre de cualquier responsabilidad sobre el uso del vehículo posterior a esta fecha.`,
-      `QUINTA.- DOCUMENTACIÓN. El VENDEDOR entrega al COMPRADOR la documentación del vehículo y se compromete a realizar los trámites de baja correspondientes ante las autoridades de tránsito.`,
-      `SEXTA.- EVIDENCIA. Las partes aceptan que las fotografías anexas a este documento (identificaciones, VIN, estado del vehículo) forman parte integral de este contrato como evidencia del estado del vehículo y la identidad de las partes al momento de la transacción.`,
-      `SÉPTIMA.- JURISDICCIÓN. Para todo lo relacionado con la interpretación y cumplimiento de este contrato, las partes se someten a la jurisdicción de los tribunales competentes de ${ciudad}.`,
+      `PRIMERA.- OBJETO. El VENDEDOR transfiere la propiedad del siguiente vehículo: ${vehicleDesc}`,
+      `SEGUNDA.- PRECIO. El precio pactado es de ${fmt(v('a_precio'))} (${numberToWords(parseInt(v('a_precio')))} pesos mexicanos), que el COMPRADOR paga al VENDEDOR en este acto.`,
+      `TERCERA.- CONDICIONES. El COMPRADOR declara que ha revisado el vehículo y lo acepta en el estado en que se encuentra. ${v('a_observaciones') ? 'Observaciones: ' + v('a_observaciones') : ''}`,
+      `CUARTA.- RESPONSABILIDAD. A partir de este contrato, el COMPRADOR asume toda responsabilidad civil, penal y administrativa sobre el vehículo.`,
+      `QUINTA.- DOCUMENTACIÓN. El VENDEDOR entrega la documentación del vehículo y se compromete a realizar los trámites de baja correspondientes.`,
+      `SEXTA.- EVIDENCIA. Las fotografías anexas forman parte integral de este contrato como evidencia del estado del vehículo.`,
+      `SÉPTIMA.- JURISDICCIÓN. Las partes se someten a la jurisdicción de los tribunales de ${ciudad}.`,
     ];
-    
-    clauses.forEach(clause => {
-      y = checkPage(y, 20);
-      y = addText(clause, margin, y, { size: 9.5 });
-      y += 4;
-    });
-    
-    // DIGITAL ACCEPTANCE (replaces physical signatures)
-    y = checkPage(y, 50);
-    y += 6;
-    y = addLine(y);
-    y += 4;
-    y = addText('CONSTANCIA DE ACEPTACIÓN DIGITAL', margin, y, { size: 11, style: 'bold' });
-    y += 3;
-    
-    y = addText(`Ambas partes declaran que la generación de este documento digital constituye su aceptación voluntaria de los términos aquí establecidos. Este contrato fue creado con el consentimiento de ambas partes presentes al momento de la transacción.`, margin, y, { size: 9.5 });
-    y += 4;
-    
-    // Seller info box
-    doc.setFillColor(245, 245, 245);
-    doc.rect(margin, y, contentW / 2 - 5, 22, 'F');
-    doc.rect(margin + contentW / 2 + 5, y, contentW / 2 - 5, 22, 'F');
-    
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(100, 100, 100);
-    doc.text('VENDEDOR', margin + 4, y + 5);
-    doc.text('COMPRADOR', margin + contentW / 2 + 9, y + 5);
-    
-    doc.setFontSize(9);
-    doc.setTextColor(30, 30, 30);
-    doc.text(v('v_nombre'), margin + 4, y + 11);
-    doc.text(v('c_nombre'), margin + contentW / 2 + 9, y + 11);
-    
-    doc.setFontSize(7.5);
-    doc.setTextColor(120, 120, 120);
-    doc.text('INE: ' + v('v_ine').toUpperCase(), margin + 4, y + 16);
-    doc.text('INE: ' + v('c_ine').toUpperCase(), margin + contentW / 2 + 9, y + 16);
-    doc.text('Tel: ' + v('v_telefono'), margin + 4, y + 20);
-    doc.text('Tel: ' + v('c_telefono'), margin + contentW / 2 + 9, y + 20);
-    
+    clauses.forEach(clause => { y = checkPage(y, 20); y = addText(clause, margin, y, {size:9.5}); y += 4; });
+
+    y = checkPage(y, 50); y += 6; y = addLine(y); y += 4;
+    y = addText('CONSTANCIA DE ACEPTACIÓN', margin, y, {size:11, style:'bold'}); y += 3;
+    y = addText('Ambas partes aceptan los términos de este contrato generado digitalmente con VentaDoc.', margin, y, {size:9.5}); y += 4;
+
+    doc.setFillColor(245,245,245);
+    doc.rect(margin, y, contentW/2-5, 22, 'F');
+    doc.rect(margin+contentW/2+5, y, contentW/2-5, 22, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(100,100,100);
+    doc.text('VENDEDOR', margin+4, y+5); doc.text('COMPRADOR', margin+contentW/2+9, y+5);
+    doc.setFontSize(9); doc.setTextColor(30,30,30);
+    doc.text(v('v_nombre'), margin+4, y+11); doc.text(v('c_nombre'), margin+contentW/2+9, y+11);
+    doc.setFontSize(7.5); doc.setTextColor(120,120,120);
+    doc.text('INE: '+v('v_ine').toUpperCase(), margin+4, y+16); doc.text('INE: '+v('c_ine').toUpperCase(), margin+contentW/2+9, y+16);
+    doc.text('Tel: '+v('v_telefono'), margin+4, y+20); doc.text('Tel: '+v('c_telefono'), margin+contentW/2+9, y+20);
     y += 28;
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(150, 150, 150);
-    doc.text(`Documento generado el ${dateStr} • ID: VD-${Date.now().toString(36).toUpperCase()}`, margin, y);
-    
-    // ===== PHOTO PAGES =====
+
+    // Photos
     const photoEntries = Object.entries(photos);
     if (photoEntries.length > 0) {
-      doc.addPage();
-      y = 20;
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(30, 30, 30);
-      doc.text('ANEXO FOTOGRÁFICO', margin, y);
-      y += 5;
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Evidencia capturada el ${dateStr}`, margin, y);
-      y += 8;
-      
-      const photoLabels = {
-        v_ine_frente: 'INE del Vendedor (frente)',
-        c_ine_frente: 'INE del Comprador (frente)',
-        foto_vin: 'Número de serie (VIN)',
-        foto_km: 'Kilometraje',
-        foto_frente: 'Vista frontal del vehículo',
-        foto_trasera: 'Vista trasera del vehículo',
-        foto_extra1: 'Foto adicional 1',
-        foto_extra2: 'Foto adicional 2',
-      };
-      
+      doc.addPage(); y = 20;
+      doc.setFontSize(16); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,30);
+      doc.text('ANEXO FOTOGRÁFICO', margin, y); y += 5;
+      doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+      doc.text(`Evidencia capturada el ${dateStr}`, margin, y); y += 8;
+      const photoLabels = { v_ine_frente:'INE del Vendedor (frente)', v_ine_reverso:'INE del Vendedor (reverso)', c_ine_frente:'INE del Comprador (frente)', c_ine_reverso:'INE del Comprador (reverso)', foto_vin:'Número de serie (VIN)', foto_km:'Kilometraje', foto_frente:'Vista frontal', foto_trasera:'Vista trasera', foto_extra1:'Foto adicional 1', foto_extra2:'Foto adicional 2' };
       for (const [key, dataUrl] of photoEntries) {
         y = checkPage(y, 80);
-        
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(60, 60, 60);
-        doc.text(photoLabels[key] || key, margin, y);
-        y += 4;
-        
-        try {
-          const imgW = 80;
-          const imgH = 60;
-          doc.addImage(dataUrl, 'JPEG', margin, y, imgW, imgH);
-          
-          doc.setFontSize(7);
-          doc.setFont('helvetica', 'normal');
-          doc.setTextColor(150, 150, 150);
-          doc.text(dateStr, margin + imgW + 4, y + 6);
-          
-          y += imgH + 8;
-        } catch (imgErr) {
-          console.warn('Error adding image ' + key, imgErr);
-          doc.setFontSize(8);
-          doc.setTextColor(200, 100, 100);
-          doc.text('[Imagen no disponible: ' + (photoLabels[key]||key) + ']', margin, y);
-          y += 8;
-        }
+        doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(60,60,60);
+        doc.text(photoLabels[key]||key, margin, y); y += 4;
+        try { doc.addImage(dataUrl,'JPEG',margin,y,80,60); y += 68; }
+        catch(e) { doc.setFontSize(8); doc.setTextColor(200,100,100); doc.text('[Imagen no disponible]', margin, y); y += 8; }
       }
     }
-    
-    // ===== FOOTER on all pages =====
+
+    // Footer
     const totalPages = doc.internal.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
-      doc.setPage(i);
-      doc.setFontSize(7);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(170, 170, 170);
+      doc.setPage(i); doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(170,170,170);
       doc.text(`VentaDoc — Contrato digital de compraventa • Página ${i} de ${totalPages}`, margin, 270);
-      doc.text(`Este documento fue generado digitalmente y contiene evidencia fotográfica con marca de tiempo.`, margin, 274);
     }
-    
-    // Store PDF for sharing/downloading
+
     pdfBlob = doc.output('blob');
     pdfDataUri = doc.output('datauristring');
-    
     loading.classList.remove('show');
     showScreen(6);
-    
-    // Auto-trigger share on mobile for best experience
     setTimeout(() => { sharePDF(); }, 600);
-    
-  } catch (err) {
+  } catch(err) {
     loading.classList.remove('show');
-    console.error('PDF generation error:', err);
-    alert('Error al generar PDF: ' + err.message + '\n\nIntenta de nuevo. Si el problema persiste, intenta sin fotos.');
+    alert('Error al generar PDF: ' + err.message);
   }
 }
 
@@ -930,138 +797,49 @@ function getFileName() {
   return `VentaDoc_${v('a_marca')}_${v('a_modelo')}_${v('a_año')}_${new Date().toISOString().slice(0,10)}.pdf`;
 }
 
-function getPDFFile() {
-  if (!pdfBlob) return null;
-  return new File([pdfBlob], getFileName(), { type: 'application/pdf' });
-}
-
 async function sharePDF() {
-  const file = getPDFFile();
-  if (!file) { alert('Error: no se encontró el PDF. Genera el contrato de nuevo.'); return; }
-  
-  // Try Web Share API with file
-  if (navigator.share && navigator.canShare) {
-    try {
-      const shareData = { files: [file] };
-      if (navigator.canShare(shareData)) {
-        await navigator.share({
-          title: 'Contrato de compraventa - VentaDoc',
-          text: 'Contrato de compraventa de vehículo usado',
-          files: [file]
-        });
-        return;
-      }
-    } catch(err) {
-      if (err.name === 'AbortError') return; // User cancelled, that's fine
-      console.warn('Web Share with file failed:', err);
-    }
+  if (!pdfBlob) return;
+  const file = new File([pdfBlob], getFileName(), {type:'application/pdf'});
+  if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+    try { await navigator.share({title:'Contrato VentaDoc', files:[file]}); return; } catch(e) {}
   }
-  
-  // Fallback: try sharing without file (just text)
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: 'Contrato de compraventa - VentaDoc',
-        text: 'Te comparto el contrato de compraventa generado con VentaDoc. Descárgalo en: ventadoc.vercel.app',
-      });
-      return;
-    } catch(err) {
-      if (err.name === 'AbortError') return;
-    }
-  }
-  
-  // Final fallback
   savePDF();
-  alert('El PDF se guardó en tu celular. Ahora puedes compartirlo desde WhatsApp o correo adjuntando el archivo.');
 }
 
 function savePDF() {
-  if (!pdfBlob) { alert('Error: no se encontró el PDF.'); return; }
-  
-  const fileName = getFileName();
-  
-  try {
-    // Create download link
-    const url = URL.createObjectURL(pdfBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    
-    // Cleanup after delay
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 3000);
-  } catch(err) {
-    console.error('Save failed:', err);
-    // Last resort: open as data URI
-    if (pdfDataUri) {
-      window.open(pdfDataUri, '_blank');
-    }
-  }
+  if (!pdfBlob) return;
+  const url = URL.createObjectURL(pdfBlob);
+  const a = document.createElement('a');
+  a.href = url; a.download = getFileName(); a.style.display = 'none';
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 3000);
 }
 
 function resetAll() {
   document.querySelectorAll('input, textarea, select').forEach(el => el.value = '');
-  document.querySelectorAll('.photo-slot.full').forEach(slot => {
-    const key = slot.id.replace('slot-','').replace(/-/g,'_');
-    removePhoto(new Event('click'), slot.id, key);
-  });
   Object.keys(photos).forEach(k => delete photos[k]);
-  pdfBlob = null;
-  pdfDataUri = null;
+  pdfBlob = null; pdfDataUri = null; paymentDone = false;
   showScreen(0);
 }
 
-// ===== NUMBER TO WORDS =====
 function numberToWords(n) {
-  if (isNaN(n) || n === 0) return 'cero';
-  
-  const units = ['','un','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
-  const teens = ['diez','once','doce','trece','catorce','quince','dieciséis','diecisiete','dieciocho','diecinueve'];
-  const tens = ['','','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
-  const hundreds = ['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
-  
-  if (n === 100) return 'cien';
-  
+  if (isNaN(n)||n===0) return 'cero';
+  const units=['','un','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
+  const teens=['diez','once','doce','trece','catorce','quince','dieciséis','diecisiete','dieciocho','diecinueve'];
+  const tens=['','','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
+  const hundreds=['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
   function convert(num) {
-    if (num === 0) return '';
-    if (num < 10) return units[num];
-    if (num < 20) return teens[num - 10];
-    if (num < 30) return num === 20 ? 'veinte' : 'veinti' + units[num - 20];
-    if (num < 100) {
-      const t = Math.floor(num / 10);
-      const u = num % 10;
-      return tens[t] + (u ? ' y ' + units[u] : '');
-    }
-    if (num === 100) return 'cien';
-    if (num < 1000) {
-      const h = Math.floor(num / 100);
-      const rest = num % 100;
-      return hundreds[h] + (rest ? ' ' + convert(rest) : '');
-    }
-    if (num < 1000000) {
-      const th = Math.floor(num / 1000);
-      const rest = num % 1000;
-      const thWord = th === 1 ? 'mil' : convert(th) + ' mil';
-      return thWord + (rest ? ' ' + convert(rest) : '');
-    }
-    if (num < 1000000000) {
-      const mil = Math.floor(num / 1000000);
-      const rest = num % 1000000;
-      const milWord = mil === 1 ? 'un millón' : convert(mil) + ' millones';
-      return milWord + (rest ? ' ' + convert(rest) : '');
-    }
+    if(num===0)return '';if(num<10)return units[num];if(num<20)return teens[num-10];
+    if(num<30)return num===20?'veinte':'veinti'+units[num-20];
+    if(num<100){const t=Math.floor(num/10),u=num%10;return tens[t]+(u?' y '+units[u]:'');}
+    if(num===100)return 'cien';
+    if(num<1000){const h=Math.floor(num/100),r=num%100;return hundreds[h]+(r?' '+convert(r):'');}
+    if(num<1000000){const th=Math.floor(num/1000),r=num%1000;return(th===1?'mil':convert(th)+' mil')+(r?' '+convert(r):'');}
     return n.toLocaleString('es-MX');
   }
-  
   return convert(n);
 }
 
-// Init
 updateUI();
 </script>
 </body>
