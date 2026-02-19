@@ -204,6 +204,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <p>Normalmente vas a la papelería, sacas copias de tu INE, llenas todo a mano y las fotos se pierden en WhatsApp. Con VentaDoc llenas todo desde el celular y en 5 minutos tienes un PDF profesional con toda la evidencia organizada.</p>
     </div>
 
+    <div style="margin-bottom:28px">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;text-align:center">¿Cómo se ve el contrato que recibes?</p>
+      <a href="contrato_ejemplo.html" target="_blank" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);border:1.5px solid rgba(200,255,62,0.3);border-radius:var(--radius);text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(200,255,62,0.7)'" onmouseout="this.style.borderColor='rgba(200,255,62,0.3)'">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--accentDim);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📄</div>
+        <div style="text-align:left">
+          <div style="color:var(--accent);font-weight:700;font-size:14px;margin-bottom:2px">Ver ejemplo de contrato real</div>
+          <div style="color:var(--text2);font-size:12px;line-height:1.4">Contrato completo con fotos, datos y timestamp — exactamente lo que recibes tú</div>
+        </div>
+        <div style="color:var(--text3);font-size:18px;margin-left:auto">→</div>
+      </a>
+    </div>
+
     <div class="price-box">
       <div class="price-label">Precio por contrato</div>
       <div class="price-amount">$99</div>
@@ -214,8 +226,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <li>PDF listo para compartir por WhatsApp</li>
         <li>Una copia para cada parte</li>
       </ul>
-      <button class="btn btn-primary" onclick="goToPayment()" style="width:100%;padding:16px;margin-bottom:10px">Generar mi contrato →</button>
-      <a href="contrato_ejemplo.html" target="_blank" style="display:block;text-align:center;color:var(--text2);font-size:13px;text-decoration:none;padding:8px">👁️ Ver ejemplo de contrato</a>
+      <button class="btn btn-primary" onclick="goToPayment()" style="width:100%;padding:16px">Generar mi contrato →</button>
     </div>
 
   </div>
