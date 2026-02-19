@@ -551,7 +551,7 @@ function updateUI() {
 function goBack() {
   if (currentScreen === 'pago') showScreen(5);
   else if (currentScreen > 1) showScreen(currentScreen - 1);
-  else if (currentScreen === 1) showScreen('pago');
+  else if (currentScreen === 1) showScreen(0);
 }
 
 function goNext() {
