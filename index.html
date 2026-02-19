@@ -235,7 +235,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="white"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="22" font-weight="bold" fill="#009ee3">MP</text></svg>
         Pagar con Mercado Pago
       </a>
-      <button class="already-paid" onclick="confirmPayment()">
+      <button class="already-paid" id="btnYaPague" onclick="confirmPayment()" style="display:none">
         Ya pagué — continuar al contrato ✓
       </button>
     </div>
@@ -494,8 +494,9 @@ function goToPayment() {
 }
 
 function onPaymentClick() {
-  // Mark that user clicked payment — they'll confirm when back
-  localStorage.setItem('vd_payment_clicked', '1');
+  setTimeout(() => {
+    document.getElementById('btnYaPague').style.display = 'block';
+  }, 3000);
 }
 
 function confirmPayment() {
