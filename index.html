@@ -16,8 +16,8 @@
     }
   });
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#08090A;--surface:#111214;--surface2:#1A1B1E;--border:#252629;
@@ -26,12 +26,12 @@
   --error:#FF6B6B;--success:#4ECDC4;--warning:#FFD93D;
   --radius:14px;
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.fade-up{animation:fadeUp 0.5s ease both}
+@keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-6px)}}
 
 /* HEADER */
 .header{
@@ -51,42 +51,554 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .screen{display:none;max-width:520px;margin:0 auto}
 .screen.active{display:block}
 
-/* LANDING */
-.landing{padding:48px 24px 40px;text-align:center}
-.landing-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--surface);border:1px solid var(--border);border-radius:100px;font-size:12px;color:var(--text2);margin-bottom:28px;font-weight:500}
+/* ===================== */
+/* LANDING REDESIGN      */
+/* ===================== */
+.landing{padding:0;overflow:hidden}
+
+/* HERO */
+.hero-section{
+  padding:48px 24px 36px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-glow{
+  position:absolute;
+  top:-100px;left:50%;transform:translateX(-50%);
+  width:500px;height:500px;
+  background:radial-gradient(ellipse,rgba(200,255,62,0.08) 0%,transparent 60%);
+  pointer-events:none;
+}
+.landing-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 14px;
+  background:rgba(200,255,62,0.07);
+  border:1px solid rgba(200,255,62,0.2);
+  border-radius:100px;
+  font-size:11.5px;color:var(--accent);
+  margin-bottom:24px;font-weight:600;
+  letter-spacing:0.05em;text-transform:uppercase;
+  animation:fadeUp 0.5s ease both 0.1s;
+}
+.landing-badge .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.hero-title{
+  font-family:'Fraunces',serif;
+  font-size:40px;font-weight:800;
+  line-height:1.05;
+  margin-bottom:16px;
+  letter-spacing:-1.5px;
+  animation:fadeUp 0.5s ease both 0.15s;
+}
+.hero-title em{font-style:italic;color:var(--accent);display:block}
+.hero-sub{
+  color:var(--text2);font-size:15px;line-height:1.65;
+  margin-bottom:32px;
+  font-weight:400;
+  animation:fadeUp 0.5s ease both 0.2s;
+}
+.hero-cta-row{
+  display:flex;flex-direction:column;gap:10px;
+  animation:fadeUp 0.5s ease both 0.25s;
+  margin-bottom:36px;
+}
+.hero-cta-main{
+  width:100%;padding:18px;
+  background:var(--accent);color:#060707;
+  border:none;border-radius:14px;
+  font-family:'Outfit',sans-serif;
+  font-size:16px;font-weight:800;
+  cursor:pointer;
+  letter-spacing:-0.3px;
+  transition:all 0.2s;
+}
+.hero-cta-main:active{transform:scale(0.98)}
+.hero-proof{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  flex-wrap:wrap;
+  animation:fadeUp 0.5s ease both 0.3s;
+}
+.hero-proof-item{
+  display:flex;align-items:center;gap:5px;
+  font-size:12px;color:var(--text3);font-weight:500;
+}
+.hero-proof-dot{width:3px;height:3px;border-radius:50%;background:var(--border)}
+
+/* TICKER STRIP */
+.ticker-strip{
+  overflow:hidden;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:12px 0;
+  margin-bottom:0;
+  background:var(--surface);
+}
+.ticker-track{
+  display:flex;gap:48px;
+  animation:ticker 18s linear infinite;
+  width:max-content;
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{
+  white-space:nowrap;
+  font-size:12px;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text3);
+  display:flex;align-items:center;gap:8px;
+}
+.ticker-item span{color:var(--accent)}
+
+/* HOW IT WORKS */
+.how-section{
+  padding:36px 24px;
+  animation:fadeUp 0.5s ease both 0.3s;
+}
+.section-eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:12px;display:block;
+}
+.section-heading{
+  font-family:'Fraunces',serif;
+  font-size:26px;font-weight:800;letter-spacing:-0.8px;
+  margin-bottom:24px;line-height:1.1;
+}
+.steps-list{display:flex;flex-direction:column;gap:0}
+.step-item{
+  display:flex;gap:16px;
+  padding:20px 0;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.step-item:last-child{border-bottom:none}
+.step-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.step-circle{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:15px;font-weight:800;
+  color:var(--accent);flex-shrink:0;
+}
+.step-line{
+  width:1px;flex:1;background:var(--border);
+  margin:6px 0;min-height:20px;
+}
+.step-item:last-child .step-line{display:none}
+.step-right{padding-top:6px}
+.step-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:-0.3px}
+.step-desc{font-size:13px;color:var(--text3);line-height:1.5}
+
+/* WHAT YOU GET */
+.get-section{
+  padding:0 24px 36px;
+  animation:fadeUp 0.5s ease both 0.35s;
+}
+.get-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;
+  border-radius:20px;overflow:hidden;
+  border:1px solid var(--border);
+}
+.get-card{
+  background:var(--surface);
+  padding:20px 18px;
+  position:relative;
+}
+.get-card:nth-child(1){border-radius:18px 0 0 0}
+.get-card:nth-child(2){border-radius:0 18px 0 0}
+.get-card:nth-child(3){border-radius:0 0 0 18px}
+.get-card:nth-child(4){border-radius:0 0 18px 0}
+.get-card-num{
+  font-family:'Fraunces',serif;
+  font-size:36px;font-weight:800;
+  color:var(--accent);
+  opacity:0.15;
+  line-height:1;
+  margin-bottom:10px;
+}
+.get-card-icon{
+  font-size:22px;margin-bottom:10px;
+}
+.get-card-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.2px;margin-bottom:4px}
+.get-card-desc{font-size:11.5px;color:var(--text3);line-height:1.5}
+.get-card::after{
+  content:'';
+  position:absolute;bottom:0;right:0;
+  width:40px;height:40px;
+  background:radial-gradient(circle,rgba(200,255,62,0.06),transparent);
+}
+
+/* COMPARE SECTION */
+.compare-section{
+  padding:0 24px 36px;
+  animation:fadeUp 0.5s ease both 0.4s;
+}
+.compare-wrapper{
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+}
+.compare-header{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--border);
+}
+.compare-col-head{
+  padding:14px 18px;
+  font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;
+}
+.compare-col-head.bad-head{
+  color:var(--text3);
+  border-right:1px solid var(--border);
+}
+.compare-col-head.good-head{
+  color:var(--accent);
+  background:rgba(200,255,62,0.04);
+}
+.compare-row-item{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--border);
+}
+.compare-row-item:last-child{border-bottom:none}
+.compare-cell{
+  padding:13px 18px;
+  font-size:13px;font-weight:500;line-height:1.35;
+  display:flex;align-items:center;gap:8px;
+}
+.compare-cell.bad-cell{
+  color:var(--text3);
+  border-right:1px solid var(--border);
+}
+.compare-cell.bad-cell::before{content:'✕';color:#FF6060;font-size:11px;font-weight:800;flex-shrink:0}
+.compare-cell.good-cell{
+  color:var(--text);
+  background:rgba(200,255,62,0.03);
+}
+.compare-cell.good-cell::before{content:'✓';color:var(--accent);font-size:11px;font-weight:800;flex-shrink:0}
+
+/* EXAMPLE */
+.example-section{
+  padding:0 24px 36px;
+  animation:fadeUp 0.5s ease both 0.45s;
+}
+.example-link{
+  display:flex;align-items:center;gap:14px;
+  padding:18px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  text-decoration:none;
+  transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.example-link::after{
+  content:'';position:absolute;
+  top:0;left:0;bottom:0;width:3px;
+  background:var(--accent);
+  border-radius:2px;
+  opacity:0;transition:opacity 0.2s;
+}
+.example-link:hover::after{opacity:1}
+.example-link:hover{background:#141516}
+.example-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(200,255,62,0.07);
+  border:1px solid rgba(200,255,62,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.example-text{}
+.example-title{color:var(--text);font-weight:700;font-size:14px;margin-bottom:3px}
+.example-desc{color:var(--text3);font-size:12px;line-height:1.4}
+.example-arrow{color:var(--text3);font-size:16px;margin-left:auto;transition:transform 0.2s;flex-shrink:0}
+.example-link:hover .example-arrow{color:var(--accent);transform:translate(2px,-2px)}
+
+/* PRICE */
+.price-section{
+  padding:0 24px 56px;
+  animation:fadeUp 0.5s ease both 0.5s;
+}
+.price-eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--text3);
+  margin-bottom:16px;text-align:center;display:block;
+}
+.price-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:28px 24px 24px;
+  position:relative;overflow:hidden;
+}
+.price-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--accent) 50%,transparent 100%);
+}
+.price-amount-row{
+  display:flex;align-items:flex-end;gap:4px;
+  margin-bottom:6px;
+}
+.price-currency{
+  font-size:22px;font-weight:700;color:var(--accent);
+  padding-bottom:10px;
+}
+.price-amount{
+  font-family:'Fraunces',serif;
+  font-size:72px;font-weight:800;
+  color:var(--accent);line-height:1;
+  letter-spacing:-3px;
+}
+.price-unit{font-size:13px;color:var(--text3);margin-bottom:24px;font-weight:400}
+.price-includes{
+  list-style:none;display:flex;flex-direction:column;gap:0;
+  margin-bottom:24px;
+}
+.price-includes li{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;color:var(--text2);font-weight:500;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.price-includes li:last-child{border-bottom:none}
+.price-includes li::before{
+  content:'✓';color:var(--accent);font-weight:800;font-size:12px;flex-shrink:0;
+}
+.cta-btn{
+  width:100%;padding:18px;
+  background:var(--accent);color:#060707;
+  border:none;border-radius:14px;
+  font-family:'Outfit',sans-serif;
+  font-size:16px;font-weight:800;
+  cursor:pointer;
+  transition:all 0.15s;
+  letter-spacing:-0.3px;
+}
+.cta-btn:active{transform:scale(0.98);background:var(--accent2)}
+.cta-note{
+  text-align:center;font-size:12px;color:var(--text3);
+  margin-top:12px;line-height:1.5;
+}
+.section-divider{
+  margin:0 24px 36px;
+  border:none;border-top:1px solid var(--border);
+}
+.landing{padding:0;overflow:hidden}
+
+/* HERO */
+.hero-section{
+  padding:52px 24px 44px;
+  text-align:center;
+  position:relative;
+}
+.hero-section::before{
+  content:'';
+  position:absolute;
+  top:-60px;left:50%;transform:translateX(-50%);
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(200,255,62,0.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+.landing-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 16px;
+  background:rgba(200,255,62,0.06);
+  border:1px solid rgba(200,255,62,0.18);
+  border-radius:100px;
+  font-size:12px;color:var(--accent);
+  margin-bottom:28px;font-weight:600;
+  letter-spacing:0.04em;
+  animation:fadeUp 0.5s ease both 0.1s;
+}
 .landing-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
-.landing h1{font-family:'Fraunces',serif;font-size:34px;font-weight:800;line-height:1.12;margin-bottom:14px;letter-spacing:-1.2px}
-.landing h1 em{font-style:italic;color:var(--accent)}
-.landing>p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:36px;max-width:360px;margin-left:auto;margin-right:auto}
-.features{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left}
-.feat{display:flex;gap:14px;align-items:center;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
-.feat-icon{width:40px;height:40px;border-radius:10px;background:var(--accentDim);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.feat-txt{font-size:14px;color:var(--text2);line-height:1.45}
-.feat-txt strong{color:var(--text);display:block;margin-bottom:1px}
-.story-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:28px;text-align:left;position:relative}
-.story-box::before{content:'"';position:absolute;top:8px;left:14px;font-family:'Fraunces',serif;font-size:48px;color:var(--accent);opacity:0.2;line-height:1}
-.story-box p{font-size:13px;color:var(--text2);line-height:1.6;padding-left:4px}
 
-/* PRICE BOX */
-.price-box{background:var(--surface);border:1px solid rgba(200,255,62,0.2);border-radius:var(--radius);padding:24px 20px;margin-bottom:28px;text-align:center}
-.price-box .price-label{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
-.price-box .price-amount{font-family:'Fraunces',serif;font-size:52px;font-weight:800;color:var(--accent);line-height:1;margin-bottom:4px}
-.price-box .price-desc{font-size:13px;color:var(--text2);margin-bottom:16px}
-.price-box .price-includes{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:16px}
-.price-box .price-includes li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);list-style:none}
-.price-box .price-includes li::before{content:'✓';color:var(--accent);font-weight:700;font-size:12px}
+.hero-title{
+  font-family:'Fraunces',serif;
+  font-size:38px;font-weight:800;
+  line-height:1.1;
+  margin-bottom:16px;
+  letter-spacing:-1.5px;
+  animation:fadeUp 0.5s ease both 0.2s;
+}
+.hero-title em{font-style:italic;color:var(--accent)}
 
+.hero-sub{
+  color:var(--text2);font-size:15px;line-height:1.65;
+  margin-bottom:36px;
+  max-width:340px;margin-left:auto;margin-right:auto;
+  font-weight:400;
+  animation:fadeUp 0.5s ease both 0.3s;
+}
+
+
+
+/* FEATURES */
+
+
+/* DIVIDER */
+.section-divider{
+  margin:0 24px 32px;
+  border:none;border-top:1px solid var(--border);
+}
+
+/* COMPARISON */
+.compare-section{
+  padding:0 24px 32px;
+  animation:fadeUp 0.5s ease both 0.45s;
+}
+.compare-label{
+  font-size:11px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--text3);
+  margin-bottom:14px;text-align:center;
+}
+.compare-blocks{display:flex;flex-direction:column;gap:8px}
+.compare-block{
+  border-radius:16px;padding:20px;
+}
+.bad-block{background:var(--surface);border:1px solid var(--border)}
+.good-block{
+  background:rgba(200,255,62,0.05);
+  border:1px solid rgba(200,255,62,0.25);
+  position:relative;overflow:hidden;
+}
+.good-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.cb-title{
+  font-size:13px;font-weight:700;color:var(--text3);
+  margin-bottom:14px;letter-spacing:-0.2px;
+}
+.accent-txt{color:var(--accent)}
+.cb-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:13.5px;line-height:1.4;
+  padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--text2);font-weight:500;
+}
+.cb-item:last-child{border-bottom:none;padding-bottom:0}
+.good-block .cb-item{color:var(--text)}
+.cb-x{color:#ff6b6b;font-size:11px;font-weight:800;flex-shrink:0;width:16px}
+.cb-check{color:var(--accent);font-size:11px;font-weight:800;flex-shrink:0;width:16px}
+
+/* EXAMPLE CONTRACT */
+.example-section{
+  padding:0 24px 32px;
+  animation:fadeUp 0.5s ease both 0.5s;
+}
+.example-link{
+  display:flex;align-items:center;gap:14px;
+  padding:18px;
+  background:var(--surface);
+  border:1.5px solid rgba(200,255,62,0.2);
+  border-radius:16px;
+  text-decoration:none;
+  transition:all 0.2s;
+  position:relative;
+  overflow:hidden;
+}
+.example-link::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(200,255,62,0.03) 0%,transparent 60%);
+}
+.example-link:hover{border-color:rgba(200,255,62,0.5);background:#141516}
+.example-link:hover .example-arrow{transform:translate(3px,-3px)}
+.example-icon{
+  width:46px;height:46px;border-radius:12px;
+  background:var(--accentDim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.example-text{}
+.example-title{color:var(--accent);font-weight:700;font-size:14px;margin-bottom:3px}
+.example-desc{color:var(--text3);font-size:12px;line-height:1.4}
+.example-arrow{color:var(--text3);font-size:16px;margin-left:auto;transition:transform 0.2s;flex-shrink:0}
+
+/* PRICE */
+.price-section{
+  padding:0 24px 48px;
+  animation:fadeUp 0.5s ease both 0.55s;
+}
+.price-card{
+  background:var(--surface);
+  border:1px solid rgba(200,255,62,0.2);
+  border-radius:20px;
+  padding:28px 24px;
+  position:relative;
+  overflow:hidden;
+}
+.price-card::before{
+  content:'';position:absolute;
+  top:-80px;right:-80px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(200,255,62,0.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.price-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:20px;
+}
+.price-left{}
+.price-tag{
+  font-size:11px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:8px;
+}
+.price-amount{
+  font-family:'Fraunces',serif;
+  font-size:56px;font-weight:800;
+  color:var(--accent);line-height:1;
+  letter-spacing:-2px;
+}
+.price-unit{font-size:13px;color:var(--text3);margin-top:4px;font-weight:400}
+.price-badge{
+  background:var(--accentDim);
+  border:1px solid rgba(200,255,62,0.2);
+  color:var(--accent);
+  font-size:11px;font-weight:700;
+  padding:5px 10px;border-radius:100px;
+  letter-spacing:0.05em;white-space:nowrap;
+}
+.price-includes{
+  list-style:none;display:flex;flex-direction:column;gap:8px;
+  margin-bottom:24px;
+}
+.price-includes li{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;color:var(--text2);font-weight:500;
+}
+.price-includes li::before{
+  content:'✓';color:var(--accent);font-weight:800;font-size:12px;flex-shrink:0;
+}
+.price-divider{border:none;border-top:1px solid var(--border);margin-bottom:20px}
+.cta-btn{
+  width:100%;padding:17px;
+  background:var(--accent);color:#080808;
+  border:none;border-radius:12px;
+  font-family:'Outfit',sans-serif;
+  font-size:16px;font-weight:800;
+  cursor:pointer;
+  transition:all 0.2s;
+  letter-spacing:-0.3px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.cta-btn:hover{background:var(--accent2);transform:translateY(-1px)}
+.cta-btn:active{transform:translateY(0)}
+.cta-note{
+  text-align:center;font-size:12px;color:var(--text3);
+  margin-top:12px;line-height:1.5;
+}
+
+/* ======================== */
 /* PAYMENT SCREEN */
+/* ======================== */
 .payment-screen{padding:48px 24px 120px;text-align:center}
 .payment-screen h2{font-family:'Fraunces',serif;font-size:28px;font-weight:700;margin-bottom:10px;letter-spacing:-0.5px}
 .payment-screen p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:32px}
 .payment-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
 .payment-amount{font-family:'Fraunces',serif;font-size:48px;font-weight:800;color:var(--accent);margin-bottom:4px}
 .payment-what{font-size:14px;color:var(--text2);margin-bottom:24px}
-.mp-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;background:#009ee3;color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:12px}
+.mp-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;background:#009ee3;color:#fff;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:12px}
 .mp-btn:hover{background:#007ec0;transform:translateY(-1px)}
-.mp-btn img{width:20px;height:20px}
-.already-paid{background:none;border:1px solid var(--border);color:var(--text2);border-radius:12px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all 0.2s}
+.already-paid{background:none;border:1px solid var(--border);color:var(--text2);border-radius:12px;padding:14px;width:100%;font-family:'Outfit',sans-serif;font-size:14px;cursor:pointer;transition:all 0.2s}
 .already-paid:hover{border-color:var(--accent);color:var(--accent)}
 .payment-note{font-size:12px;color:var(--text3);line-height:1.5;margin-top:16px}
 .security-badges{display:flex;justify-content:center;gap:16px;margin-top:20px;flex-wrap:wrap}
@@ -101,7 +613,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .field label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:0.2px}
 .field input,.field select,.field textarea{
   width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);
-  border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;
+  border-radius:12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:16px;
   transition:border-color 0.2s;outline:none;-webkit-appearance:none;
 }
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
@@ -131,7 +643,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   border-top:1px solid var(--border);z-index:100;
 }
 .bottom-bar .inner{max-width:520px;margin:0 auto;display:flex;gap:10px}
-.btn{flex:1;padding:15px 20px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;}
+.btn{flex:1;padding:15px 20px;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:-0.2px;}
 .btn-primary{background:var(--accent);color:#0A0A0A}
 .btn-primary:hover{background:var(--accent2)}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed}
@@ -161,7 +673,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .loading-text{color:var(--text2);font-size:15px}
 
 @media(min-width:600px){
-  .landing h1{font-size:42px}
+  .hero-title{font-size:46px}
   .photo-grid{grid-template-columns:1fr 1fr 1fr}
 }
 </style>
@@ -177,56 +689,113 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <!-- SCREEN 0: LANDING -->
 <div class="screen active" id="screen-0">
-  <div class="landing fade-up">
-    <h1>Cierra tu venta de auto con un <em>contrato real.</em></h1>
-    <p>Sin papelería, sin imprenta, sin riesgo. En 5 minutos tienes tu contrato PDF listo para compartir.</p>
+  <div class="landing">
 
-    <div class="features">
-      <div class="feat">
-        <div class="feat-icon">🪪</div>
-        <div class="feat-txt"><strong>Identificaciones</strong>Foto de la INE de ambas partes. Datos capturados automáticamente.</div>
+    <!-- HERO -->
+    <div class="hero-section">
+      <div class="hero-glow"></div>
+      <div class="landing-badge">
+        <span class="dot"></span>
+        5 minutos · Legal · PDF
       </div>
-      <div class="feat">
-        <div class="feat-icon">📸</div>
-        <div class="feat-txt"><strong>Evidencia del auto</strong>VIN, kilometraje, estado exterior e interior. Todo con fecha y hora.</div>
+      <h1 class="hero-title">
+        Vende tu auto.
+        <em>Con contrato.</em>
+      </h1>
+      <p class="hero-sub">Sin papelería ni copias. Llenas todo desde el celular y recibes un PDF profesional listo para firmar.</p>
+      <div class="hero-cta-row">
+        <a href="contrato_ejemplo.html" target="_blank" class="hero-cta-main" style="display:block;text-decoration:none;text-align:center;">Ver ejemplo de contrato →</a>
       </div>
-      <div class="feat">
-        <div class="feat-icon">📄</div>
-        <div class="feat-txt"><strong>Contrato PDF profesional</strong>Se genera automáticamente. Una copia para cada parte.</div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">🛡️</div>
-        <div class="feat-txt"><strong>Protección legal</strong>Evidencia completa en caso de cualquier problema futuro.</div>
-      </div>
-    </div>
-
-    <div class="story-box">
-      <p>Normalmente vas a la papelería, sacas copias de tu INE, llenas todo a mano y las fotos se pierden en WhatsApp. Con VentaDoc llenas todo desde el celular y en 5 minutos tienes un PDF profesional con toda la evidencia organizada.</p>
-    </div>
-
-    <div style="margin-bottom:28px">
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;text-align:center">¿Cómo se ve el contrato que recibes?</p>
-      <a href="contrato_ejemplo.html" target="_blank" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);border:1.5px solid rgba(200,255,62,0.3);border-radius:var(--radius);text-decoration:none;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(200,255,62,0.7)'" onmouseout="this.style.borderColor='rgba(200,255,62,0.3)'">
-        <div style="width:48px;height:48px;border-radius:12px;background:var(--accentDim);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📄</div>
-        <div style="text-align:left">
-          <div style="color:var(--accent);font-weight:700;font-size:14px;margin-bottom:2px">Ver ejemplo de contrato real</div>
-          <div style="color:var(--text2);font-size:12px;line-height:1.4">Contrato completo con fotos, datos y timestamp — exactamente lo que recibes tú</div>
+      <div class="hero-proof">
+        <div class="hero-proof-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Protección legal
         </div>
-        <div style="color:var(--text3);font-size:18px;margin-left:auto">→</div>
-      </a>
+        <div class="hero-proof-dot"></div>
+        <div class="hero-proof-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          PDF profesional
+        </div>
+        <div class="hero-proof-dot"></div>
+        <div class="hero-proof-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          5 minutos
+        </div>
+      </div>
     </div>
 
-    <div class="price-box">
-      <div class="price-label">Precio por contrato</div>
-      <div class="price-amount">$99</div>
-      <div class="price-desc">pesos mexicanos · pago único</div>
-      <ul class="price-includes">
-        <li>Contrato de compraventa completo</li>
-        <li>Evidencia fotográfica incluida</li>
-        <li>PDF listo para compartir por WhatsApp</li>
-        <li>Una copia para cada parte</li>
-      </ul>
-      <button class="btn btn-primary" onclick="goToPayment()" style="width:100%;padding:16px">Generar mi contrato →</button>
+    <!-- TICKER -->
+    <div class="ticker-strip">
+      <div class="ticker-track">
+        <div class="ticker-item">PDF Profesional <span>✦</span></div>
+        <div class="ticker-item">Sin papelería <span>✦</span></div>
+        <div class="ticker-item">Foto de INE <span>✦</span></div>
+        <div class="ticker-item">Timestamp legal <span>✦</span></div>
+        <div class="ticker-item">Para WhatsApp <span>✦</span></div>
+        <div class="ticker-item">100% desde el celular <span>✦</span></div>
+        <div class="ticker-item">PDF Profesional <span>✦</span></div>
+        <div class="ticker-item">Sin papelería <span>✦</span></div>
+        <div class="ticker-item">Foto de INE <span>✦</span></div>
+        <div class="ticker-item">Timestamp legal <span>✦</span></div>
+        <div class="ticker-item">Para WhatsApp <span>✦</span></div>
+        <div class="ticker-item">100% desde el celular <span>✦</span></div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-section">
+      <span class="section-eyebrow">Cómo funciona</span>
+      <h2 class="section-heading">En 4 pasos simples</h2>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-left">
+            <div class="step-circle">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-right">
+            <div class="step-title">Capturas los datos</div>
+            <div class="step-desc">Nombre, dirección y datos del auto — todo desde el teclado.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-left">
+            <div class="step-circle">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-right">
+            <div class="step-title">Tomas las fotos</div>
+            <div class="step-desc">INE de ambas partes, VIN del auto, odómetro y fotos del vehículo.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-left">
+            <div class="step-circle">3</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-right">
+            <div class="step-title">Pagas con Mercado Pago</div>
+            <div class="step-desc">Tarjeta, transferencia o efectivo. Pago único de $99 MXN.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-left">
+            <div class="step-circle">4</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-right">
+            <div class="step-title">Descargas el PDF</div>
+            <div class="step-desc">Contrato completo con evidencia fotográfica y timestamp. Listo para WhatsApp.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- BOTTOM CTA -->
+    <div style="padding:0 24px 56px;">
+      <button class="hero-cta-main" onclick="goToPayment()">Generar mi contrato — $99</button>
+      <div style="text-align:center;font-size:12px;color:var(--text3);margin-top:12px;">🔒 Pago seguro con Mercado Pago</div>
     </div>
 
   </div>
@@ -238,7 +807,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div style="font-size:48px;margin-bottom:16px">🔒</div>
     <h2>Último paso — pago</h2>
     <p>Tus datos están listos. Completa el pago para generar tu contrato PDF al instante.</p>
-
     <div class="payment-box">
       <div class="payment-amount">$99</div>
       <div class="payment-what">Contrato de compraventa de vehículo</div>
@@ -250,11 +818,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         Ya pagué — continuar al contrato ✓
       </button>
     </div>
-
     <div class="payment-note">
       Al hacer click en "Pagar con Mercado Pago" se abrirá la página de pago en una nueva pestaña. Cuando termines, regresa aquí y haz click en "Ya pagué".
     </div>
-
     <div class="security-badges">
       <div class="security-badge">🔒 Pago seguro</div>
       <div class="security-badge">📱 Acepta tarjeta y transferencia</div>
@@ -269,40 +835,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="section-num">1</div>
     <div class="section-title">Datos del vendedor</div>
     <p class="section-sub">Quien vende el vehículo. Llena los datos tal como aparecen en tu INE.</p>
-    <div class="field">
-      <label>Nombre completo</label>
-      <input type="text" id="v_nombre" placeholder="Como aparece en tu INE" autocomplete="name">
-    </div>
+    <div class="field"><label>Nombre completo</label><input type="text" id="v_nombre" placeholder="Como aparece en tu INE" autocomplete="name"></div>
     <div class="row">
-      <div class="field">
-        <label>Teléfono</label>
-        <input type="tel" id="v_telefono" placeholder="10 dígitos" autocomplete="tel">
-      </div>
-      <div class="field">
-        <label>Email (opcional)</label>
-        <input type="email" id="v_email" placeholder="correo@ejemplo.com" autocomplete="email">
-      </div>
+      <div class="field"><label>Teléfono</label><input type="tel" id="v_telefono" placeholder="10 dígitos" autocomplete="tel"></div>
+      <div class="field"><label>Email (opcional)</label><input type="email" id="v_email" placeholder="correo@ejemplo.com" autocomplete="email"></div>
     </div>
-    <div class="field">
-      <label>Domicilio</label>
-      <input type="text" id="v_domicilio" placeholder="Calle, número, colonia, ciudad" autocomplete="street-address">
-    </div>
-    <div class="field">
-      <label>Clave de elector (INE)</label>
-      <input type="text" id="v_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase">
-    </div>
+    <div class="field"><label>Domicilio</label><input type="text" id="v_domicilio" placeholder="Calle, número, colonia, ciudad" autocomplete="street-address"></div>
+    <div class="field"><label>Clave de elector (INE)</label><input type="text" id="v_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase"></div>
     <div class="field">
       <label>Foto de tu INE</label>
       <div class="photo-grid">
         <div class="photo-slot" id="slot-v-ine-frente" onclick="triggerPhoto(this,'v_ine_frente')">
           <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-v-ine-frente','v_ine_frente')">
-          <span class="icon">🪪</span>
-          <span class="label">Frente</span>
+          <span class="icon">🪪</span><span class="label">Frente</span>
         </div>
         <div class="photo-slot" id="slot-v-ine-reverso" onclick="triggerPhoto(this,'v_ine_reverso')">
           <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-v-ine-reverso','v_ine_reverso')">
-          <span class="icon">🪪</span>
-          <span class="label">Reverso</span>
+          <span class="icon">🪪</span><span class="label">Reverso</span>
         </div>
       </div>
     </div>
@@ -315,40 +864,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="section-num">2</div>
     <div class="section-title">Datos del comprador</div>
     <p class="section-sub">Quien compra el vehículo. Pídele su INE y llena sus datos.</p>
-    <div class="field">
-      <label>Nombre completo</label>
-      <input type="text" id="c_nombre" placeholder="Como aparece en su INE">
-    </div>
+    <div class="field"><label>Nombre completo</label><input type="text" id="c_nombre" placeholder="Como aparece en su INE"></div>
     <div class="row">
-      <div class="field">
-        <label>Teléfono</label>
-        <input type="tel" id="c_telefono" placeholder="10 dígitos">
-      </div>
-      <div class="field">
-        <label>Email (opcional)</label>
-        <input type="email" id="c_email" placeholder="correo@ejemplo.com">
-      </div>
+      <div class="field"><label>Teléfono</label><input type="tel" id="c_telefono" placeholder="10 dígitos"></div>
+      <div class="field"><label>Email (opcional)</label><input type="email" id="c_email" placeholder="correo@ejemplo.com"></div>
     </div>
-    <div class="field">
-      <label>Domicilio</label>
-      <input type="text" id="c_domicilio" placeholder="Calle, número, colonia, ciudad">
-    </div>
-    <div class="field">
-      <label>Clave de elector (INE)</label>
-      <input type="text" id="c_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase">
-    </div>
+    <div class="field"><label>Domicilio</label><input type="text" id="c_domicilio" placeholder="Calle, número, colonia, ciudad"></div>
+    <div class="field"><label>Clave de elector (INE)</label><input type="text" id="c_ine" placeholder="18 caracteres alfanuméricos" maxlength="18" style="text-transform:uppercase"></div>
     <div class="field">
       <label>Foto de su INE</label>
       <div class="photo-grid">
         <div class="photo-slot" id="slot-c-ine-frente" onclick="triggerPhoto(this,'c_ine_frente')">
           <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-c-ine-frente','c_ine_frente')">
-          <span class="icon">🪪</span>
-          <span class="label">Frente</span>
+          <span class="icon">🪪</span><span class="label">Frente</span>
         </div>
         <div class="photo-slot" id="slot-c-ine-reverso" onclick="triggerPhoto(this,'c_ine_reverso')">
           <input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'slot-c-ine-reverso','c_ine_reverso')">
-          <span class="icon">🪪</span>
-          <span class="label">Reverso</span>
+          <span class="icon">🪪</span><span class="label">Reverso</span>
         </div>
       </div>
     </div>
@@ -362,42 +894,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="section-title">Datos del vehículo</div>
     <p class="section-sub">Información del auto que se vende. Revisa la tarjeta de circulación.</p>
     <div class="row">
-      <div class="field">
-        <label>Marca</label>
-        <input type="text" id="a_marca" placeholder="Ej: Honda, Toyota">
-      </div>
-      <div class="field">
-        <label>Modelo</label>
-        <input type="text" id="a_modelo" placeholder="Ej: Civic, Corolla">
-      </div>
+      <div class="field"><label>Marca</label><input type="text" id="a_marca" placeholder="Ej: Honda, Toyota"></div>
+      <div class="field"><label>Modelo</label><input type="text" id="a_modelo" placeholder="Ej: Civic, Corolla"></div>
     </div>
     <div class="row">
-      <div class="field">
-        <label>Año</label>
-        <input type="number" id="a_año" placeholder="Ej: 2018" min="1970" max="2027">
-      </div>
-      <div class="field">
-        <label>Color</label>
-        <input type="text" id="a_color" placeholder="Ej: Blanco">
-      </div>
+      <div class="field"><label>Año</label><input type="number" id="a_año" placeholder="Ej: 2018" min="1970" max="2027"></div>
+      <div class="field"><label>Color</label><input type="text" id="a_color" placeholder="Ej: Blanco"></div>
     </div>
-    <div class="field">
-      <label>Número de serie (VIN)</label>
-      <input type="text" id="a_vin" placeholder="17 caracteres" maxlength="17" style="text-transform:uppercase">
-    </div>
-    <div class="field">
-      <label>Placas</label>
-      <input type="text" id="a_placas" placeholder="Ej: ABC-123" style="text-transform:uppercase">
-    </div>
+    <div class="field"><label>Número de serie (VIN)</label><input type="text" id="a_vin" placeholder="17 caracteres" maxlength="17" style="text-transform:uppercase"></div>
+    <div class="field"><label>Placas</label><input type="text" id="a_placas" placeholder="Ej: ABC-123" style="text-transform:uppercase"></div>
     <div class="row">
-      <div class="field">
-        <label>Kilometraje</label>
-        <input type="number" id="a_km" placeholder="Ej: 85000">
-      </div>
-      <div class="field">
-        <label>Precio de venta (MXN)</label>
-        <input type="number" id="a_precio" placeholder="Ej: 120000">
-      </div>
+      <div class="field"><label>Kilometraje</label><input type="number" id="a_km" placeholder="Ej: 85000"></div>
+      <div class="field"><label>Precio de venta (MXN)</label><input type="number" id="a_precio" placeholder="Ej: 120000"></div>
     </div>
   </div>
 </div>
@@ -444,7 +952,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="field">
       <label>Observaciones (opcional)</label>
-      <textarea id="a_observaciones" rows="3" placeholder="Detalles adicionales: golpes, fallas mecánicas, acuerdos especiales..." style="width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;resize:vertical;outline:none"></textarea>
+      <textarea id="a_observaciones" rows="3" placeholder="Detalles adicionales: golpes, fallas mecánicas, acuerdos especiales..." style="width:100%;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:16px;resize:vertical;outline:none"></textarea>
     </div>
   </div>
 </div>
@@ -493,33 +1001,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 <script>
-// ===== STATE =====
 let currentScreen = 0;
 const totalSteps = 5;
 const photos = {};
 let paymentDone = false;
 
-// ===== PAYMENT =====
-function goToPayment() {
-  showScreen(1);
-}
+function goToPayment() { showScreen(1); }
+function onPaymentClick() { setTimeout(() => { document.getElementById('btnYaPague').style.display = 'block'; }, 3000); }
+function confirmPayment() { paymentDone = true; generatePDF(); }
 
-function onPaymentClick() {
-  setTimeout(() => {
-    document.getElementById('btnYaPague').style.display = 'block';
-  }, 3000);
-}
-
-function confirmPayment() {
-  paymentDone = true;
-  generatePDF();
-}
-
-// ===== NAVIGATION =====
 function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById(`screen-${n}`);
-  screen.classList.add('active');
+  document.getElementById(`screen-${n}`).classList.add('active');
   currentScreen = n;
   updateUI();
   window.scrollTo(0, 0);
@@ -529,9 +1022,7 @@ function updateUI() {
   const bar = document.getElementById('bottomBar');
   const back = document.getElementById('backBtn');
   const btnBack = document.getElementById('btnBack');
-
   const isFormScreen = typeof currentScreen === 'number' && currentScreen >= 1 && currentScreen <= 5;
-
   if (currentScreen === 0 || currentScreen === 6 || currentScreen === 'pago') {
     bar.style.display = 'none';
     back.style.display = currentScreen === 'pago' ? 'block' : 'none';
@@ -540,8 +1031,6 @@ function updateUI() {
     back.style.display = 'block';
     btnBack.style.display = currentScreen === 1 ? 'none' : '';
   }
-
-  // Pills
   const pills = document.getElementById('pills');
   pills.innerHTML = '';
   if (isFormScreen) {
@@ -553,11 +1042,8 @@ function updateUI() {
       pills.appendChild(p);
     }
   }
-
   const btnNext = document.getElementById('btnNext');
-  if (btnNext) {
-    btnNext.textContent = currentScreen === 5 ? 'Continuar al pago →' : 'Siguiente →';
-  }
+  if (btnNext) btnNext.textContent = currentScreen === 5 ? 'Continuar al pago →' : 'Siguiente →';
 }
 
 function goBack() {
@@ -574,7 +1060,6 @@ function goNext() {
   }
 }
 
-// ===== VALIDATION =====
 function validateScreen(n) {
   let required = [];
   switch(n) {
@@ -600,7 +1085,6 @@ function validateScreen(n) {
   return valid;
 }
 
-// ===== PHOTOS =====
 function triggerPhoto(slot, key) {
   if (slot.classList.contains('full')) return;
   slot.querySelector('input[type="file"]').click();
@@ -639,10 +1123,8 @@ function removePhoto(event, slotId, key) {
   const slot = document.getElementById(slotId);
   slot.classList.remove('full');
   const labels = {
-    v_ine_frente:'🪪|Frente',
-    v_ine_reverso:'🪪|Reverso',
-    c_ine_frente:'🪪|Frente',
-    c_ine_reverso:'🪪|Reverso',
+    v_ine_frente:'🪪|Frente', v_ine_reverso:'🪪|Reverso',
+    c_ine_frente:'🪪|Frente', c_ine_reverso:'🪪|Reverso',
     foto_vin:'🔢|VIN / Número de serie', foto_km:'🔄|Kilometraje',
     foto_frente:'🚗|Frente del auto', foto_trasera:'🚙|Parte trasera',
     foto_extra1:'➕|Foto adicional', foto_extra2:'➕|Foto adicional',
@@ -651,23 +1133,19 @@ function removePhoto(event, slotId, key) {
   slot.innerHTML = `<input type="file" accept="image/*" capture="environment" onchange="handlePhoto(event,'${slotId}','${key}')"><span class="icon">${icon}</span><span class="label">${label}</span>`;
 }
 
-// ===== REVIEW =====
 function buildReview() {
   const v = (id) => document.getElementById(id).value || '—';
   const fmt = (n) => { const num = parseInt(n); return isNaN(num) ? '—' : '$' + num.toLocaleString('es-MX'); };
-
   document.getElementById('review-vendedor').innerHTML = `<h3>🟢 Vendedor</h3>
     <div class="review-row"><span class="rlabel">Nombre</span><span class="rvalue">${v('v_nombre')}</span></div>
     <div class="review-row"><span class="rlabel">Teléfono</span><span class="rvalue">${v('v_telefono')}</span></div>
     <div class="review-row"><span class="rlabel">Domicilio</span><span class="rvalue">${v('v_domicilio')}</span></div>
     <div class="review-row"><span class="rlabel">Clave INE</span><span class="rvalue">${v('v_ine')}</span></div>`;
-
   document.getElementById('review-comprador').innerHTML = `<h3>🔵 Comprador</h3>
     <div class="review-row"><span class="rlabel">Nombre</span><span class="rvalue">${v('c_nombre')}</span></div>
     <div class="review-row"><span class="rlabel">Teléfono</span><span class="rvalue">${v('c_telefono')}</span></div>
     <div class="review-row"><span class="rlabel">Domicilio</span><span class="rvalue">${v('c_domicilio')}</span></div>
     <div class="review-row"><span class="rlabel">Clave INE</span><span class="rvalue">${v('c_ine')}</span></div>`;
-
   document.getElementById('review-auto').innerHTML = `<h3>🚗 Vehículo</h3>
     <div class="review-row"><span class="rlabel">Marca / Modelo</span><span class="rvalue">${v('a_marca')} ${v('a_modelo')}</span></div>
     <div class="review-row"><span class="rlabel">Año</span><span class="rvalue">${v('a_año')}</span></div>
@@ -676,7 +1154,6 @@ function buildReview() {
     <div class="review-row"><span class="rlabel">Placas</span><span class="rvalue">${v('a_placas')}</span></div>
     <div class="review-row"><span class="rlabel">Kilometraje</span><span class="rvalue">${v('a_km') ? parseInt(v('a_km')).toLocaleString('es-MX') + ' km' : '—'}</span></div>
     <div class="review-row"><span class="rlabel">Precio</span><span class="rvalue" style="color:var(--accent);font-weight:700">${fmt(v('a_precio'))}</span></div>`;
-
   const grid = document.getElementById('review-photos-grid');
   grid.innerHTML = '';
   const photoLabels = { v_ine_frente:'INE Vendedor (frente)', v_ine_reverso:'INE Vendedor (reverso)', c_ine_frente:'INE Comprador (frente)', c_ine_reverso:'INE Comprador (reverso)', foto_vin:'VIN', foto_km:'Kilometraje', foto_frente:'Frente', foto_trasera:'Trasera', foto_extra1:'Extra 1', foto_extra2:'Extra 2' };
@@ -684,7 +1161,6 @@ function buildReview() {
   if (Object.keys(photos).length === 0) grid.innerHTML = '<p style="color:var(--text3);font-size:13px">No se tomaron fotos</p>';
 }
 
-// ===== PDF =====
 let pdfBlob = null;
 let pdfDataUri = null;
 
@@ -711,22 +1187,18 @@ async function generatePDF() {
 
     function addText(text, x, yPos, opts = {}) {
       const size = opts.size || 10;
-      doc.setFontSize(size);
-      doc.setFont('helvetica', opts.style || 'normal');
+      doc.setFontSize(size); doc.setFont('helvetica', opts.style || 'normal');
       if (opts.color) doc.setTextColor(...opts.color); else doc.setTextColor(30, 30, 30);
       const lines = doc.splitTextToSize(text, opts.maxW || contentW);
       lines.forEach(line => {
         if (yPos > 250) { doc.addPage(); yPos = 20; }
-        doc.text(line, x, yPos);
-        yPos += size * 0.45;
+        doc.text(line, x, yPos); yPos += size * 0.45;
       });
       return yPos;
     }
-
     function addLine(yPos) { doc.setDrawColor(200,200,200); doc.line(margin, yPos, w-margin, yPos); return yPos + 6; }
     function checkPage(yPos, needed = 30) { if (yPos + needed > 250) { doc.addPage(); return 20; } return yPos; }
 
-    // Header
     doc.setFontSize(22); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,30);
     doc.text('CONTRATO DE COMPRAVENTA', margin, y); y += 7;
     doc.setFontSize(12); doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
@@ -738,7 +1210,6 @@ async function generatePDF() {
     const ciudad = 'Tijuana, Baja California';
     const contractText = `En la ciudad de ${ciudad}, a ${now.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'})}, comparecen por una parte como VENDEDOR(A): ${v('v_nombre')}, con domicilio en ${v('v_domicilio')}, con clave de elector ${v('v_ine').toUpperCase()}, teléfono ${v('v_telefono')}; y por otra parte como COMPRADOR(A): ${v('c_nombre')}, con domicilio en ${v('c_domicilio')}, con clave de elector ${v('c_ine').toUpperCase()}, teléfono ${v('c_telefono')}; quienes celebran el presente contrato de compraventa de vehículo usado:`;
     y = addText(contractText, margin, y, {size:10}); y += 4;
-
     y = addText('CLÁUSULAS', margin, y, {size:12, style:'bold'}); y += 2;
     const vehicleDesc = `${v('a_marca')} ${v('a_modelo')} ${v('a_año')}, color ${v('a_color')}, VIN: ${v('a_vin').toUpperCase()}, placas: ${v('a_placas').toUpperCase()}, kilometraje: ${v('a_km') ? parseInt(v('a_km')).toLocaleString('es-MX') : 'N/A'} km.`;
     const clauses = [
@@ -755,10 +1226,8 @@ async function generatePDF() {
     y = checkPage(y, 50); y += 6; y = addLine(y); y += 4;
     y = addText('CONSTANCIA DE ACEPTACIÓN', margin, y, {size:11, style:'bold'}); y += 3;
     y = addText('Ambas partes aceptan los términos de este contrato generado digitalmente con VentaDoc.', margin, y, {size:9.5}); y += 4;
-
     doc.setFillColor(245,245,245);
-    doc.rect(margin, y, contentW/2-5, 22, 'F');
-    doc.rect(margin+contentW/2+5, y, contentW/2-5, 22, 'F');
+    doc.rect(margin, y, contentW/2-5, 22, 'F'); doc.rect(margin+contentW/2+5, y, contentW/2-5, 22, 'F');
     doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(100,100,100);
     doc.text('VENDEDOR', margin+4, y+5); doc.text('COMPRADOR', margin+contentW/2+9, y+5);
     doc.setFontSize(9); doc.setTextColor(30,30,30);
@@ -768,7 +1237,6 @@ async function generatePDF() {
     doc.text('Tel: '+v('v_telefono'), margin+4, y+20); doc.text('Tel: '+v('c_telefono'), margin+contentW/2+9, y+20);
     y += 28;
 
-    // Photos
     const photoEntries = Object.entries(photos);
     if (photoEntries.length > 0) {
       doc.addPage(); y = 20;
@@ -786,7 +1254,6 @@ async function generatePDF() {
       }
     }
 
-    // Footer
     const totalPages = doc.internal.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i); doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(170,170,170);
